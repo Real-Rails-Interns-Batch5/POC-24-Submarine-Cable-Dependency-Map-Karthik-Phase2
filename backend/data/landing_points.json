@@ -1,0 +1,13 @@
+[
+  {"id":"lp1",  "name":"Virginia Beach, VA",          "countryId":"c1","tier":2,"coordinates":[-75.9779,36.8529]},
+  {"id":"lp2",  "name":"Bude, UK",                    "countryId":"c2","tier":1,"coordinates":[-4.5437,50.8266]},
+  {"id":"lp3",  "name":"Saint-Hilaire, France",       "countryId":"c3","tier":2,"coordinates":[-1.9448,46.7289]},
+  {"id":"lp4",  "name":"Shima, Japan",                "countryId":"c4","tier":1,"coordinates":[136.8219,34.3308]},
+  {"id":"lp5",  "name":"Tuas, Singapore",             "countryId":"c5","tier":1,"coordinates":[103.6366,1.3294]},
+  {"id":"lp6",  "name":"Fortaleza, Brazil",           "countryId":"c6","tier":2,"coordinates":[-38.5267,-3.7319]},
+  {"id":"lp7",  "name":"Melkbosstrand, South Africa", "countryId":"c7","tier":2,"coordinates":[18.4395,-33.7258]},
+  {"id":"lp8",  "name":"Mumbai, India",               "countryId":"c8","tier":1,"coordinates":[72.8777,19.0760]},
+  {"id":"lp9",  "name":"Marseille, France",           "countryId":"c3","tier":1,"coordinates":[5.3698,43.2965]},
+  {"id":"lp10", "name":"Bandon, OR",                  "countryId":"c1","tier":2,"coordinates":[-124.4084,43.1189]},
+  {"id":"lp11", "name":"Genoa, Italy",                "countryId":"c3","tier":3,"coordinates":[8.9463,44.4056]}
+]

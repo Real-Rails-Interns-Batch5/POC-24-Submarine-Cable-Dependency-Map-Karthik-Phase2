@@ -1,0 +1,10 @@
+[
+  {"id": "o1", "name": "Meta",               "type": "private"},
+  {"id": "o2", "name": "Google",             "type": "private"},
+  {"id": "o3", "name": "Microsoft",          "type": "private"},
+  {"id": "o4", "name": "Amazon",             "type": "private"},
+  {"id": "o5", "name": "Orange",             "type": "telecom"},
+  {"id": "o6", "name": "Vodafone",           "type": "telecom"},
+  {"id": "o7", "name": "Tata Communications","type": "telecom"},
+  {"id": "o8", "name": "Telxius",            "type": "telecom"}
+]

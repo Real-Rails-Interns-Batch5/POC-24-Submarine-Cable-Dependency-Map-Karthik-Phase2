@@ -1,0 +1,10 @@
+[
+  {"id":"c1","name":"United States","code":"US","coordinates":[-95.7129,37.0902]},
+  {"id":"c2","name":"United Kingdom","code":"UK","coordinates":[-3.4360,55.3781]},
+  {"id":"c3","name":"France","code":"FR","coordinates":[2.2137,46.2276]},
+  {"id":"c4","name":"Japan","code":"JP","coordinates":[138.2529,36.2048]},
+  {"id":"c5","name":"Singapore","code":"SG","coordinates":[103.8198,1.3521]},
+  {"id":"c6","name":"Brazil","code":"BR","coordinates":[-51.9253,-14.2350]},
+  {"id":"c7","name":"South Africa","code":"ZA","coordinates":[22.9375,-30.5595]},
+  {"id":"c8","name":"India","code":"IN","coordinates":[78.9629,20.5937]}
+]

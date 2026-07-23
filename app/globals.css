@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #08131B;
+    --surface: #0D1C28;
+    --border: #1D3446;
+    --primary: #36D6FF;
+    --secondary: #5EEAD4;
+    --text-primary: #F1F5F9;
+    --text-muted: #94A3B8;
+    --accent-red: #ef4444;
+    --accent-amber: #f59e0b;
+    --accent-green: #10b981;
+  }
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Header mount — rises gently from top edge */
+@keyframes headerRise {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-header-rise {
+  animation: headerRise 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Panel content fade-slide — runs when inner content swaps */
+@keyframes panelContentIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-panel-content {
+  animation: panelContentIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Marker-selection feedback — quick scale flash on the close button */
+@keyframes popIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.animate-pop-in {
+  animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Landing point pulse animation — Tier 1 Global Hubs */
+@keyframes hubPulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  50%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(1);   opacity: 0; }
+}
+
+.hub-pulse-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid #36D6FF;
+  animation: hubPulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.hub-pulse-ring.ring-2 {
+  animation-delay: 0.8s;
+}
+
+/* Leaflet map attribution strip */
+.leaflet-control-attribution {
+  background: rgba(8, 19, 27, 0.75) !important;
+  color: #3d4d66 !important;
+  font-size: 9px !important;
+  border-radius: 4px 0 0 0 !important;
+}
+
+.leaflet-control-attribution a {
+  color: #64748b !important;
+}
+
+/* Ensure map container doesn't bleed */
+.leaflet-container {
+  background: #08131B !important;
+}
+
+/* Landing point tooltip */
+.lp-tooltip {
+  background: #0D1C28;
+  border: 1px solid #1D3446;
+  color: #F1F5F9;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  padding: 8px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* Persistent LP labels */
+.lp-permanent-label {
+  color: #F1F5F9;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 1px 6px rgba(0,0,0,0.8);
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  margin-top: -10px;
+}
+
+.lp-permanent-label span {
+  color: #36D6FF;
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.9;
+}

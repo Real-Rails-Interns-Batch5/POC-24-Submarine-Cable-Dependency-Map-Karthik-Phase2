@@ -1,0 +1,3984 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+app/
+  fonts/
+    GeistMonoVF.woff
+    GeistVF.woff
+  favicon.ico
+  globals.css
+  layout.tsx
+  page.tsx
+backend/
+  data/
+    cables.json
+    countries.json
+    landing_points.json
+    owners.json
+  models/
+    __init__.py
+    cable.py
+    country.py
+    landing_point.py
+    owner.py
+    simulation_request.py
+    simulation_response.py
+  routers/
+    __init__.py
+    cables.py
+    network.py
+    ownership.py
+    simulation.py
+  services/
+    __init__.py
+    data_loader.py
+    intelligence.py
+    simulation_engine.py
+  utils/
+    __init__.py
+  __init__.py
+  main.py
+  requirements.txt
+components/
+  layout/
+    Header.tsx
+    IntelligenceSidebar.tsx
+    LandingPointPanel.tsx
+  map/
+    LeafletCableMap.tsx
+    MapTooltip.tsx
+  providers/
+    AppStateProvider.tsx
+  ui/
+    button.tsx
+lib/
+  api.ts
+  constants.ts
+  download.ts
+  geojson.ts
+  types.ts
+  useApi.ts
+  utils.ts
+public/
+  mock/
+    cables.geojson
+    landing_points.geojson
+    ownership.json
+.env.example
+.eslintrc.json
+.gitignore
+components.json
+next.config.mjs
+package.json
+postcss.config.mjs
+README.md
+run.py
+tailwind.config.ts
+test.js
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="app/layout.tsx">
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { AppStateProvider } from "@/components/providers/AppStateProvider";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Submarine Cable Dependency Map",
+  description: "Real Rails Intelligence Library: Project #24",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark">
+      <body className={inter.className}>
+        <AppStateProvider>
+          {children}
+        </AppStateProvider>
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="backend/data/cables.json">
+[
+  {
+    "id":"cab1","name":"MAREA","lengthKm":6600,"capacityTbps":224,
+    "status":"active","region":"transatlantic",
+    "owners":["o1","o3","o8"],"landingPoints":["lp1","lp3"],
+    "path":[[-75.9779,36.8529],[-68.0,38.5],[-58.0,41.5],[-46.0,44.0],[-34.0,46.0],[-20.0,47.5],[-10.0,47.0],[-1.9448,46.7289]],
+    "color":"#3b82f6","glowColor":"rgba(59,130,246,0.4)"
+  },
+  {
+    "id":"cab2","name":"Dunant","lengthKm":6400,"capacityTbps":250,
+    "status":"active","region":"transatlantic",
+    "owners":["o2","o5"],"landingPoints":["lp1","lp3"],
+    "path":[[-75.9779,36.8529],[-66.0,37.5],[-55.0,40.5],[-44.0,43.5],[-32.0,45.5],[-18.0,46.5],[-8.0,46.5],[-1.9448,46.7289]],
+    "color":"#60a5fa","glowColor":"rgba(96,165,250,0.4)"
+  },
+  {
+    "id":"cab3","name":"2Africa","lengthKm":45000,"capacityTbps":180,
+    "status":"planned","region":"emea",
+    "owners":["o1","o5","o6"],"landingPoints":["lp2","lp7","lp8"],
+    "path":[[-4.5437,50.8266],[-8.0,42.0],[-12.0,32.0],[-15.5,22.0],[-17.0,13.0],[-16.0,5.0],[-12.0,-2.0],[-5.0,-12.0],[5.0,-22.0],[12.0,-30.0],[18.4395,-33.7258],[26.0,-28.0],[33.0,-20.0],[39.0,-12.0],[44.0,-5.0],[48.0,5.0],[53.0,12.0],[60.0,16.0],[67.0,18.0],[72.8777,19.0760]],
+    "color":"#14b8a6","glowColor":"rgba(20,184,166,0.4)"
+  },
+  {
+    "id":"cab4","name":"AAE-1","lengthKm":25000,"capacityTbps":40,
+    "status":"active","region":"emea",
+    "owners":["o7"],"landingPoints":["lp9","lp8","lp5"],
+    "path":[[5.3698,43.2965],[12.0,37.5],[20.0,34.0],[26.0,32.5],[32.5,30.5],[36.0,24.0],[40.0,18.0],[43.5,12.5],[46.0,11.0],[52.0,13.5],[58.0,16.0],[65.0,17.5],[72.8777,19.0760],[78.0,12.0],[85.0,8.0],[92.0,4.0],[98.0,2.0],[103.6366,1.3294]],
+    "color":"#f59e0b","glowColor":"rgba(245,158,11,0.4)"
+  },
+  {
+    "id":"cab5","name":"SeaMeWe-6","lengthKm":19200,"capacityTbps":120,
+    "status":"planned","region":"emea",
+    "owners":["o3","o5"],"landingPoints":["lp9","lp8","lp5"],
+    "path":[[5.3698,43.2965],[14.0,38.0],[22.0,34.5],[28.0,32.0],[33.0,30.0],[37.0,23.5],[41.0,17.0],[44.5,12.0],[53.0,14.0],[60.0,17.0],[66.0,18.0],[72.8777,19.0760],[80.0,11.0],[88.0,5.5],[96.0,2.5],[103.6366,1.3294]],
+    "color":"#a855f7","glowColor":"rgba(168,85,247,0.4)"
+  },
+  {
+    "id":"cab6","name":"FASTER","lengthKm":11629,"capacityTbps":60,
+    "status":"active","region":"transpacific",
+    "owners":["o2"],"landingPoints":["lp10","lp4"],
+    "path":[[-124.4084,43.1189],[-135.0,46.0],[-145.0,50.0],[-155.0,51.5],[-165.0,51.0],[-175.0,49.0],[-185.0,46.5],[-195.0,43.5],[-205.0,40.0],[-212.0,37.0],[-219.0,35.0],[-223.1781,34.3308]],
+    "color":"#22c55e","glowColor":"rgba(34,197,94,0.4)"
+  },
+  {
+    "id":"cab7","name":"Jupiter","lengthKm":14600,"capacityTbps":60,
+    "status":"active","region":"transpacific",
+    "owners":["o1","o4"],"landingPoints":["lp10","lp4"],
+    "path":[[-124.4084,43.1189],[-132.0,44.5],[-142.0,47.5],[-152.0,49.5],[-162.0,49.0],[-172.0,47.0],[-182.0,44.5],[-192.0,41.5],[-202.0,38.0],[-210.0,36.0],[-217.0,34.5],[-223.1781,34.3308]],
+    "color":"#4ade80","glowColor":"rgba(74,222,128,0.4)"
+  },
+  {
+    "id":"cab8","name":"Apricot","lengthKm":12000,"capacityTbps":190,
+    "status":"planned","region":"intra-asia",
+    "owners":["o1","o2"],"landingPoints":["lp4","lp5"],
+    "path":[[136.8219,34.3308],[133.0,29.0],[128.0,23.5],[124.0,18.0],[120.0,13.0],[116.0,8.0],[112.0,4.5],[108.0,2.5],[105.0,1.8],[103.6366,1.3294]],
+    "color":"#f97316","glowColor":"rgba(249,115,22,0.4)"
+  },
+  {
+    "id":"cab9","name":"ACE","lengthKm":17000,"capacityTbps":20,
+    "status":"active","region":"emea",
+    "owners":["o5"],"landingPoints":["lp3","lp7"],
+    "path":[[-1.9448,46.7289],[-5.0,42.0],[-8.0,36.0],[-12.0,28.5],[-15.0,20.0],[-16.5,12.0],[-16.0,5.0],[-14.0,-1.0],[-10.0,-8.0],[-5.0,-16.0],[2.0,-22.0],[8.0,-28.0],[13.0,-32.0],[18.4395,-33.7258]],
+    "color":"#ef4444","glowColor":"rgba(239,68,68,0.4)"
+  },
+  {
+    "id":"cab10","name":"EllaLink","lengthKm":6200,"capacityTbps":100,
+    "status":"active","region":"transatlantic",
+    "owners":["o8"],"landingPoints":["lp6","lp11"],
+    "path":[[-38.5267,-3.7319],[-30.0,4.0],[-22.0,12.0],[-14.0,20.0],[-6.0,28.0],[0.0,34.0],[4.0,38.5],[7.0,42.0],[8.9463,44.4056]],
+    "color":"#8b5cf6","glowColor":"rgba(139,92,246,0.4)"
+  }
+]
+</file>
+
+<file path="backend/data/countries.json">
+[
+  {"id":"c1","name":"United States","code":"US","coordinates":[-95.7129,37.0902]},
+  {"id":"c2","name":"United Kingdom","code":"UK","coordinates":[-3.4360,55.3781]},
+  {"id":"c3","name":"France","code":"FR","coordinates":[2.2137,46.2276]},
+  {"id":"c4","name":"Japan","code":"JP","coordinates":[138.2529,36.2048]},
+  {"id":"c5","name":"Singapore","code":"SG","coordinates":[103.8198,1.3521]},
+  {"id":"c6","name":"Brazil","code":"BR","coordinates":[-51.9253,-14.2350]},
+  {"id":"c7","name":"South Africa","code":"ZA","coordinates":[22.9375,-30.5595]},
+  {"id":"c8","name":"India","code":"IN","coordinates":[78.9629,20.5937]}
+]
+</file>
+
+<file path="backend/data/landing_points.json">
+[
+  {"id":"lp1",  "name":"Virginia Beach, VA",          "countryId":"c1","tier":2,"coordinates":[-75.9779,36.8529]},
+  {"id":"lp2",  "name":"Bude, UK",                    "countryId":"c2","tier":1,"coordinates":[-4.5437,50.8266]},
+  {"id":"lp3",  "name":"Saint-Hilaire, France",       "countryId":"c3","tier":2,"coordinates":[-1.9448,46.7289]},
+  {"id":"lp4",  "name":"Shima, Japan",                "countryId":"c4","tier":1,"coordinates":[136.8219,34.3308]},
+  {"id":"lp5",  "name":"Tuas, Singapore",             "countryId":"c5","tier":1,"coordinates":[103.6366,1.3294]},
+  {"id":"lp6",  "name":"Fortaleza, Brazil",           "countryId":"c6","tier":2,"coordinates":[-38.5267,-3.7319]},
+  {"id":"lp7",  "name":"Melkbosstrand, South Africa", "countryId":"c7","tier":2,"coordinates":[18.4395,-33.7258]},
+  {"id":"lp8",  "name":"Mumbai, India",               "countryId":"c8","tier":1,"coordinates":[72.8777,19.0760]},
+  {"id":"lp9",  "name":"Marseille, France",           "countryId":"c3","tier":1,"coordinates":[5.3698,43.2965]},
+  {"id":"lp10", "name":"Bandon, OR",                  "countryId":"c1","tier":2,"coordinates":[-124.4084,43.1189]},
+  {"id":"lp11", "name":"Genoa, Italy",                "countryId":"c3","tier":3,"coordinates":[8.9463,44.4056]}
+]
+</file>
+
+<file path="backend/data/owners.json">
+[
+  {"id": "o1", "name": "Meta",               "type": "private"},
+  {"id": "o2", "name": "Google",             "type": "private"},
+  {"id": "o3", "name": "Microsoft",          "type": "private"},
+  {"id": "o4", "name": "Amazon",             "type": "private"},
+  {"id": "o5", "name": "Orange",             "type": "telecom"},
+  {"id": "o6", "name": "Vodafone",           "type": "telecom"},
+  {"id": "o7", "name": "Tata Communications","type": "telecom"},
+  {"id": "o8", "name": "Telxius",            "type": "telecom"}
+]
+</file>
+
+<file path="backend/models/__init__.py">
+
+</file>
+
+<file path="backend/models/cable.py">
+from typing import List, Optional
+from pydantic import BaseModel
+
+class Cable(BaseModel):
+    id: str
+    name: str
+    lengthKm: int
+    capacityTbps: int
+    status: str                         # "active" | "planned" | "maintenance"
+    region: str                         # "transatlantic" | "emea" | "transpacific" | "intra-asia"
+    owners: List[str]                   # list of Owner IDs
+    landingPoints: List[str]            # list of LandingPoint IDs
+    path: List[List[float]]             # list of [lon, lat] pairs
+    color: str
+    glowColor: str
+</file>
+
+<file path="backend/models/country.py">
+from typing import List
+from pydantic import BaseModel
+
+class Country(BaseModel):
+    id: str
+    name: str
+    code: str
+    coordinates: List[float]  # [lon, lat]
+</file>
+
+<file path="backend/models/landing_point.py">
+from typing import List
+from pydantic import BaseModel
+
+class LandingPoint(BaseModel):
+    id: str
+    name: str
+    countryId: str
+    tier: int                   # 1 = primary, 2 = secondary, 3 = tertiary
+    coordinates: List[float]    # [lon, lat]
+</file>
+
+<file path="backend/models/owner.py">
+from pydantic import BaseModel
+
+class Owner(BaseModel):
+    id: str
+    name: str
+    type: str  # "private" | "telecom"
+</file>
+
+<file path="backend/models/simulation_request.py">
+from pydantic import BaseModel, Field
+
+class SimulationCutRequest(BaseModel):
+    cable_id: str = Field(..., description="ID of the cable to simulate cutting")
+</file>
+
+<file path="backend/models/simulation_response.py">
+from typing import List, Optional
+from pydantic import BaseModel
+
+class SimulationCutResponse(BaseModel):
+    health_score: int
+    capacity_loss_tbps: int
+    affected_regions: List[str]
+    rerouting_required: bool
+    impact: str                     # "HIGH" | "MEDIUM" | "LOW"
+    summary: str
+    resilience_score: int
+    rerouting_recommendation: str
+    alternative_cables: List[str]
+    risk_narrative: str
+    timestamp: str
+
+class ScenarioItem(BaseModel):
+    cable_id: str
+    name: str
+
+class HistoryItem(BaseModel):
+    cable_id: str
+    result: SimulationCutResponse
+</file>
+
+<file path="backend/routers/__init__.py">
+
+</file>
+
+<file path="backend/routers/cables.py">
+from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Query
+from backend.models.cable import Cable
+from backend.models.landing_point import LandingPoint
+from backend.services.data_loader import DataLoader
+
+router = APIRouter()
+
+
+@router.get("", response_model=List[Cable])
+def get_cables(
+    region: Optional[str] = Query(None, description="Filter by region"),
+    status: Optional[str] = Query(None, description="Filter by status (active/planned)"),
+    owner: Optional[str] = Query(None, description="Filter by owner ID"),
+):
+    """Return all cables. Supports optional filters: region, status, owner."""
+    cables = DataLoader.get_cables()
+    if region:
+        cables = [c for c in cables if c.region.lower() == region.lower()]
+    if status:
+        cables = [c for c in cables if c.status.lower() == status.lower()]
+    if owner:
+        cables = [c for c in cables if owner in c.owners]
+    return cables
+
+
+@router.get("/landing-points", response_model=List[LandingPoint])
+def get_landing_points():
+    """Return all cable landing points."""
+    return DataLoader.get_landing_points()
+
+
+@router.get("/{cable_id}", response_model=Cable)
+def get_cable(cable_id: str):
+    """Return a single cable by ID."""
+    cable = next((c for c in DataLoader.get_cables() if c.id == cable_id), None)
+    if not cable:
+        raise HTTPException(status_code=404, detail=f"Cable '{cable_id}' not found")
+    return cable
+</file>
+
+<file path="backend/routers/network.py">
+from fastapi import APIRouter
+from backend.services.intelligence import network_overview, intelligence_assessment
+
+router = APIRouter()
+
+
+@router.get("/overview")
+def get_network_overview():
+    """Return dynamically computed network health overview."""
+    return network_overview()
+
+
+@router.get("/assessment")
+def get_assessment():
+    """Return full intelligence assessment for the dashboard."""
+    return intelligence_assessment()
+</file>
+
+<file path="backend/routers/ownership.py">
+from typing import List
+from fastapi import APIRouter
+from backend.models.owner import Owner
+from backend.models.country import Country
+from backend.services.data_loader import DataLoader
+from backend.services.intelligence import ownership_percentages
+
+router = APIRouter()
+
+
+@router.get("", response_model=List[Owner])
+def get_owners():
+    """Return all cable owners."""
+    return DataLoader.get_owners()
+
+
+@router.get("/percentages")
+def get_ownership_percentages():
+    """Return computed ownership concentration percentages."""
+    return ownership_percentages()
+
+
+@router.get("/countries", response_model=List[Country])
+def get_countries():
+    """Return all countries."""
+    return DataLoader.get_countries()
+</file>
+
+<file path="backend/routers/simulation.py">
+from typing import List, Any
+from fastapi import APIRouter, HTTPException
+from backend.models.simulation_request import SimulationCutRequest
+from backend.models.simulation_response import SimulationCutResponse, ScenarioItem
+from backend.services.simulation_engine import run_cut_simulation, get_scenarios, get_history
+
+router = APIRouter()
+
+
+@router.post("/cut", response_model=SimulationCutResponse)
+def cut_cable(body: SimulationCutRequest):
+    """Simulate cutting a cable and return the impact assessment."""
+    try:
+        result = run_cut_simulation(body.cable_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    return result
+
+
+@router.get("/scenarios", response_model=List[ScenarioItem])
+def list_scenarios():
+    """Return all available cut scenarios (active cables)."""
+    return get_scenarios()
+
+
+@router.get("/history")
+def simulation_history():
+    """Return in-memory simulation history, newest first."""
+    return get_history()
+</file>
+
+<file path="backend/services/__init__.py">
+
+</file>
+
+<file path="backend/services/data_loader.py">
+"""Singleton data loader – reads JSON files once at startup and caches them."""
+import json
+from pathlib import Path
+from typing import List
+
+from backend.models.cable import Cable
+from backend.models.landing_point import LandingPoint
+from backend.models.owner import Owner
+from backend.models.country import Country
+
+DATA_DIR = Path(__file__).parent.parent / "data"
+
+
+class DataLoader:
+    _cables: List[Cable] = []
+    _landing_points: List[LandingPoint] = []
+    _owners: List[Owner] = []
+    _countries: List[Country] = []
+    _loaded: bool = False
+
+    @classmethod
+    def load_all(cls) -> None:
+        """Load all JSON files into memory. Called once at application startup."""
+        if cls._loaded:
+            return
+        cls._cables = [Cable(**c) for c in json.loads((DATA_DIR / "cables.json").read_text(encoding="utf-8"))]
+        cls._landing_points = [LandingPoint(**lp) for lp in json.loads((DATA_DIR / "landing_points.json").read_text(encoding="utf-8"))]
+        cls._owners = [Owner(**o) for o in json.loads((DATA_DIR / "owners.json").read_text(encoding="utf-8"))]
+        cls._countries = [Country(**c) for c in json.loads((DATA_DIR / "countries.json").read_text(encoding="utf-8"))]
+        cls._loaded = True
+
+    @classmethod
+    def get_cables(cls) -> List[Cable]:
+        if not cls._loaded:
+            cls.load_all()
+        return cls._cables
+
+    @classmethod
+    def get_landing_points(cls) -> List[LandingPoint]:
+        if not cls._loaded:
+            cls.load_all()
+        return cls._landing_points
+
+    @classmethod
+    def get_owners(cls) -> List[Owner]:
+        if not cls._loaded:
+            cls.load_all()
+        return cls._owners
+
+    @classmethod
+    def get_countries(cls) -> List[Country]:
+        if not cls._loaded:
+            cls.load_all()
+        return cls._countries
+</file>
+
+<file path="backend/services/simulation_engine.py">
+"""Simulation engine service for cable cut scenarios.
+
+All business logic is kept here – the router only forwards the request.
+"""
+from datetime import datetime
+from typing import List, Dict, Any
+
+from backend.services.data_loader import DataLoader
+
+
+def compute_resilience(health_score: int, affected_region: str, capacity_loss_pct: float):
+    """Inline resilience calculation – no external dependency required."""
+    resilience_score = max(0, min(100, health_score - int(capacity_loss_pct * 0.5)))
+
+    if capacity_loss_pct > 15:
+        recommendation = "Activate emergency rerouting via alternative corridors immediately."
+    elif capacity_loss_pct > 7:
+        recommendation = "Increase traffic distribution across remaining active cables."
+    else:
+        recommendation = "Monitor network performance; no immediate rerouting required."
+
+    # Map region to alternative cable names
+    region_alternatives = {
+        "transatlantic": ["MAREA", "Dunant", "EllaLink"],
+        "emea": ["AAE-1", "ACE", "SeaMeWe-6"],
+        "transpacific": ["FASTER", "Jupiter"],
+        "intra-asia": ["Apricot", "AAE-1"],
+    }
+    alternatives = region_alternatives.get(affected_region.lower(), ["Redundant path analysis required"])
+
+    if health_score >= 85:
+        narrative = "Network remains resilient. Minimal operational disruption expected."
+    elif health_score >= 65:
+        narrative = "Moderate degradation detected. Regional traffic may experience congestion."
+    else:
+        narrative = "Critical degradation. Immediate intervention required to restore capacity."
+
+    return resilience_score, recommendation, alternatives, narrative
+
+# In‑memory store for completed simulations (persisted only while the process lives)
+SIMULATION_HISTORY: List[Dict[str, Any]] = []
+
+
+def get_scenarios() -> List[Dict[str, str]]:
+    """Return a list of possible cut scenarios.
+    For simplicity we expose every *active* cable as a scenario.
+    """
+    return [{"cable_id": c.id, "name": c.name} for c in DataLoader.get_cables() if c.status == "active"]
+
+
+def _calculate_loss(cable_id: str) -> Dict[str, Any]:
+    """Internal helper – computes metrics for a cut simulation *without* mutating anything.
+    Raises ``ValueError`` if the cable cannot be cut.
+    """
+    all_cables = DataLoader.get_cables()
+    active_cables = [c for c in all_cables if c.status == "active"]
+    total_capacity = sum(c.capacityTbps for c in active_cables)
+    total_active = len(active_cables)
+
+    # Locate the target cable (must be active)
+    target = next((c for c in active_cables if c.id == cable_id), None)
+    if not target:
+        raise ValueError("Cable not found or not active")
+
+    # New network state after the cut
+    new_active = total_active - 1
+    capacity_loss = target.capacityTbps
+    new_capacity = total_capacity - capacity_loss
+    capacity_loss_pct = (capacity_loss / total_capacity) * 100 if total_capacity else 0
+
+    # ---------- Health score ----------
+    health = 100
+    # capacity loss penalty – direct percentage impact
+    health -= capacity_loss_pct
+    # redundancy penalty – if the region loses its last active cable, -10
+    region_active = len([c for c in active_cables if c.region == target.region and c.id != cable_id])
+    if region_active == 0:
+        health -= 10
+    # regional dependency penalty – extra -5 for EMEA (example rule)
+    if target.region.lower() == "emea":
+        health -= 5
+    health = max(0, int(round(health)))
+
+    # ---------- Impact classification ----------
+    if capacity_loss_pct > 15:
+        impact = "HIGH"
+    elif capacity_loss_pct > 7:
+        impact = "MEDIUM"
+    else:
+        impact = "LOW"
+
+    affected_regions = [target.region.upper()]
+    rerouting_required = impact in {"HIGH", "MEDIUM"}
+
+    # ---------- Bonus intelligence ----------
+    resilience_score, recommendation, alternatives, narrative = compute_resilience(
+        health_score=health,
+        affected_region=target.region,
+        capacity_loss_pct=capacity_loss_pct,
+    )
+
+    result: Dict[str, Any] = {
+        "health_score": health,
+        "capacity_loss_tbps": capacity_loss,
+        "affected_regions": affected_regions,
+        "rerouting_required": rerouting_required,
+        "impact": impact,
+        "summary": f"{target.name} disruption {impact.lower()}ly impacts the network.",
+        # Bonus fields
+        "resilience_score": resilience_score,
+        "rerouting_recommendation": recommendation,
+        "alternative_cables": alternatives,
+        "risk_narrative": narrative,
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+    }
+    return result
+
+
+def run_cut_simulation(cable_id: str) -> Dict[str, Any]:
+    """Public API – executes a cut simulation and records it.
+    Returns the computed result dictionary.
+    """
+    try:
+        result = _calculate_loss(cable_id)
+    except ValueError as exc:
+        raise exc
+    # Store a shallow copy in the global history list
+    SIMULATION_HISTORY.append({"cable_id": cable_id, "result": result})
+    return result
+
+
+def get_history() -> List[Dict[str, Any]]:
+    """Return the stored simulation history, newest first."""
+    return list(reversed(SIMULATION_HISTORY))
+</file>
+
+<file path="backend/utils/__init__.py">
+
+</file>
+
+<file path="backend/__init__.py">
+
+</file>
+
+<file path="backend/requirements.txt">
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+pydantic==2.7.1
+python-dotenv==1.0.1
+</file>
+
+<file path="components/layout/LandingPointPanel.tsx">
+"use client";
+
+import React from 'react';
+import { LANDING_POINTS, CABLES, COUNTRIES, OWNERS } from '@/lib/constants';
+
+const TIER_LABEL: Record<number, { label: string; color: string }> = {
+  1: { label: 'Global Internet Hub',  color: '#36D6FF' },
+  2: { label: 'Regional Hub',         color: '#5EEAD4' },
+  3: { label: 'Landing Station',      color: '#94A3B8' },
+};
+
+const NETWORK_ROLE: Record<number, string> = {
+  1: 'Primary aggregation node. Loss creates cascading regional impact across multiple cable corridors.',
+  2: 'Regional distribution hub. Disruption forces traffic rerouting through adjacent corridors.',
+  3: 'Standard termination station. Moderate resilience with established alternate routes.',
+};
+
+interface LandingPointPanelProps {
+  landingPointId: string;
+}
+
+export function LandingPointPanel({ landingPointId }: LandingPointPanelProps) {
+  const lp = LANDING_POINTS.find(p => p.id === landingPointId);
+  if (!lp) return null;
+
+  const country   = COUNTRIES.find(c => c.id === lp.countryId);
+  const tier      = lp.tier ?? 3;
+  const tierInfo  = TIER_LABEL[tier];
+
+  // All cables that have this landing point
+  const connectedCables = CABLES.filter(c => c.landingPoints.includes(lp.id));
+  const totalCapacity   = connectedCables.reduce((sum, c) => sum + c.capacityTbps, 0);
+  const activeCables    = connectedCables.filter(c => c.status === 'active');
+
+  // Collect all unique owner IDs across connected cables
+  const ownerIds  = Array.from(new Set(connectedCables.flatMap(c => c.owners)));
+  const owners    = ownerIds.map(id => OWNERS.find(o => o.id === id)).filter(Boolean);
+
+  return (
+    <div className="flex flex-col h-full bg-[var(--surface)] text-[var(--text-primary)]">
+      
+      {/* Header */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h2 className="text-sm font-bold text-gray-100 uppercase tracking-widest pr-8">{lp.name}</h2>
+            <span className="text-[9px] font-bold uppercase tracking-widest mt-1 block" style={{ color: tierInfo.color }}>
+              {tierInfo.label}
+            </span>
+          </div>
+        </div>
+
+        {/* Core metrics grid */}
+        <div className="grid grid-cols-2 gap-[1px] bg-[var(--border)] rounded overflow-hidden mt-3">
+          <div className="bg-[var(--background)] p-3 flex flex-col">
+            <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Country</span>
+            <span className="text-sm font-bold text-gray-200">{country?.name ?? lp.countryId}</span>
+          </div>
+          <div className="bg-[var(--background)] p-3 flex flex-col">
+            <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Tier</span>
+            <span className="text-sm font-bold" style={{ color: tierInfo.color }}>{tier}</span>
+          </div>
+          <div className="bg-[var(--background)] p-3 flex flex-col">
+            <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Connected Cables</span>
+            <span className="text-sm font-bold text-gray-200">{connectedCables.length}</span>
+          </div>
+          <div className="bg-[var(--background)] p-3 flex flex-col">
+            <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Total Capacity</span>
+            <span className="text-sm font-bold text-gray-200">{totalCapacity} <span className="text-[10px] text-[#64748b]">Tbps</span></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Connected Cables */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Connected Cables</h3>
+        <div className="flex flex-col gap-[1px] bg-[var(--border)] rounded overflow-hidden">
+          {connectedCables.map(cable => (
+            <div key={cable.id} className="bg-[var(--background)] p-2.5 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: cable.color }} />
+                <span className="text-[11px] font-medium text-gray-200">{cable.name}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-[var(--text-muted)]">{cable.capacityTbps} Tbps</span>
+                <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide ${
+                  cable.status === 'active'
+                    ? 'bg-[#22c55e]/15 text-[#22c55e] border border-[#22c55e]/25'
+                    : 'bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/25'
+                }`}>
+                  {cable.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Active vs Planned summary */}
+        <div className="flex gap-2 mt-3">
+          <div className="flex-1 bg-[var(--background)] border border-[var(--border)] rounded p-2 text-center">
+            <span className="block text-lg font-bold text-[#22c55e] leading-none">{activeCables.length}</span>
+            <span className="text-[8px] uppercase tracking-wider text-[var(--text-muted)] font-semibold">Active</span>
+          </div>
+          <div className="flex-1 bg-[var(--background)] border border-[var(--border)] rounded p-2 text-center">
+            <span className="block text-lg font-bold text-[#f59e0b] leading-none">{connectedCables.length - activeCables.length}</span>
+            <span className="text-[8px] uppercase tracking-wider text-[var(--text-muted)] font-semibold">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Ownership */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Stakeholders</h3>
+        <div className="flex flex-col gap-[1px] bg-[var(--border)] rounded overflow-hidden">
+          {owners.map(owner => (
+            <div key={owner!.id} className="bg-[var(--background)] p-2.5 flex justify-between items-center">
+              <span className="text-[11px] font-medium text-gray-200">{owner!.name}</span>
+              <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide ${
+                owner!.type === 'private'
+                  ? 'bg-[#36D6FF]/10 text-[#36D6FF] border border-[#36D6FF]/20'
+                  : owner!.type === 'telecom'
+                  ? 'bg-[#5EEAD4]/10 text-[#5EEAD4] border border-[#5EEAD4]/20'
+                  : 'bg-[#94A3B8]/10 text-[#94A3B8] border border-[#94A3B8]/20'
+              }`}>
+                {owner!.type}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Network Role */}
+      <div className="p-5">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Network Role</h3>
+        <div className="border-l-2 pl-3 py-1" style={{ borderColor: tierInfo.color }}>
+          <span className="block text-[9px] uppercase font-bold tracking-widest mb-1" style={{ color: tierInfo.color }}>
+            Operational Context
+          </span>
+          <p className="text-[10px] text-[#94a3b8] leading-relaxed">{NETWORK_ROLE[tier]}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/map/MapTooltip.tsx">
+import React from 'react';
+import { Cable, LandingPoint } from '@/lib/types';
+import { COUNTRIES, OWNERS, CABLES } from '@/lib/constants';
+import { redundancyLabel, redundancyColor } from '@/lib/utils';
+
+export interface TooltipState {
+  show: boolean;
+  x: number;
+  y: number;
+  type: 'cable' | 'lp' | null;
+  data: Cable | LandingPoint | null;
+}
+
+export function MapTooltip({ tooltip }: { tooltip: TooltipState }) {
+  if (!tooltip.show || !tooltip.data) return null;
+
+  const { x, y, type, data } = tooltip;
+
+  if (type === 'cable') {
+    const cable = data as Cable;
+    const ownersList = cable.owners.map(oid => OWNERS.find(o => o.id === oid)?.name).join(', ');
+    const redundancy = cable.landingPoints.length;
+
+    return (
+      <div 
+        className="absolute pointer-events-none bg-[var(--depth-3)] border border-[var(--border-default)] rounded-[9px] p-[11px_13px] shadow-[0_12px_32px_rgba(0,0,0,0.5)] z-50 w-[220px]"
+        style={{ left: x + 15, top: y + 15 }}
+      >
+        <h3 className="text-[13px] font-bold text-[var(--text-primary)] mb-2">{cable.name}</h3>
+        <div className="flex flex-col gap-1 text-[11px] text-[var(--text-muted)]">
+          <div className="flex justify-between">
+            <span>Capacity</span>
+            <span className="text-[var(--text-primary)]">{cable.capacityTbps} Tbps</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Status</span>
+            <span style={{ color: cable.status === 'active' ? '#22c55e' : cable.status === 'planned' ? '#14b8a6' : '#ef4444' }} className="capitalize">
+              {cable.status.replace('_', ' ')}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Region</span>
+            <span className="text-[var(--text-primary)] capitalize">{cable.region.replace('-', ' ')}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Redundancy</span>
+            <span style={{ color: redundancyColor(redundancy) }}>{redundancyLabel(redundancy)}</span>
+          </div>
+          <div className="flex justify-between mt-1 pt-1 border-t border-[var(--border-subtle)]">
+            <span>Owners</span>
+            <span className="text-[var(--text-primary)] text-right truncate ml-2" title={ownersList}>{ownersList}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === 'lp') {
+    const lp = data as LandingPoint;
+    const country = COUNTRIES.find(c => c.id === lp.countryId);
+    const connectedCables = CABLES.filter((c: Cable) => c.landingPoints.includes(lp.id));
+
+    return (
+      <div 
+        className="absolute pointer-events-none bg-[var(--depth-3)] border border-[var(--border-default)] rounded-[9px] p-[11px_13px] shadow-[0_12px_32px_rgba(0,0,0,0.5)] z-50 w-[180px]"
+        style={{ left: x + 15, top: y + 15 }}
+      >
+        <h3 className="text-[12px] font-bold text-[var(--text-primary)] mb-2">{lp.name}</h3>
+        <div className="flex flex-col gap-1 text-[11px] text-[var(--text-muted)]">
+          <div className="flex justify-between">
+            <span>Country</span>
+            <span className="text-[var(--text-primary)]">{country?.name}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Node Type</span>
+            <span className="text-[var(--text-primary)]">{connectedCables.length >= 3 ? 'Major' : connectedCables.length === 2 ? 'Mid' : 'Minor'}</span>
+          </div>
+          <div className="flex justify-between mb-1 pb-1 border-b border-[var(--border-subtle)]">
+            <span>Cables</span>
+            <span className="text-[var(--text-primary)]">{connectedCables.length}</span>
+          </div>
+          <div className="flex flex-col gap-0.5 text-[10px]">
+            {connectedCables.map((c: Cable) => (
+              <span key={c.id} style={{ color: c.color }}>• {c.name}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+</file>
+
+<file path="components/ui/button.tsx">
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        outline:
+          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+        ghost:
+          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+        destructive:
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default:
+          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        icon: "size-8",
+        "icon-xs":
+          "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm":
+          "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
+        "icon-lg": "size-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <ButtonPrimitive
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }
+</file>
+
+<file path="lib/api.ts">
+/**
+ * lib/api.ts
+ * Centralised API client for the FastAPI backend.
+ * All fetch calls go through here – components never call fetch() directly.
+ */
+import { Cable, LandingPoint, Owner, Country } from "./types";
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+async function get<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`API error ${res.status} on ${path}`);
+  return res.json() as Promise<T>;
+}
+
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`API error ${res.status} on ${path}`);
+  return res.json() as Promise<T>;
+}
+
+// ─── Response Types ──────────────────────────────────────────────────────────
+
+export interface NetworkOverview {
+  active_cables: number;
+  landing_points: number;
+  capacity_tbps: number;
+  health_score: number;
+}
+
+export interface NetworkAssessment {
+  health: number;
+  resilience: string;
+  ownership_concentration: string;
+  primary_bottleneck: string;
+  regional_dependency: string;
+}
+
+export interface OwnershipPercentages {
+  google: number;
+  meta: number;
+  microsoft: number;
+  orange: number;
+  others: number;
+}
+
+export interface SimulationResult {
+  health_score: number;
+  capacity_loss_tbps: number;
+  affected_regions: string[];
+  rerouting_required: boolean;
+  impact: "HIGH" | "MEDIUM" | "LOW";
+  summary: string;
+  resilience_score: number;
+  rerouting_recommendation: string;
+  alternative_cables: string[];
+  risk_narrative: string;
+  timestamp: string;
+}
+
+export interface SimulationScenario {
+  cable_id: string;
+  name: string;
+}
+
+// ─── Network ─────────────────────────────────────────────────────────────────
+
+export const getNetworkOverview = () =>
+  get<NetworkOverview>("/api/network/overview");
+
+export const getAssessment = () =>
+  get<NetworkAssessment>("/api/network/assessment");
+
+// ─── Cables ───────────────────────────────────────────────────────────────────
+
+export interface CableFilters {
+  region?: string;
+  status?: string;
+  owner?: string;
+}
+
+export const getCables = (filters?: CableFilters) => {
+  const params = new URLSearchParams();
+  if (filters?.region && filters.region !== "all") params.set("region", filters.region);
+  if (filters?.status && filters.status !== "all") params.set("status", filters.status);
+  if (filters?.owner) params.set("owner", filters.owner);
+  const qs = params.toString();
+  return get<Cable[]>(`/api/cables${qs ? `?${qs}` : ""}`);
+};
+
+export const getCable = (id: string) => get<Cable>(`/api/cables/${id}`);
+
+export const getLandingPoints = () => get<LandingPoint[]>("/api/cables/landing-points");
+
+// ─── Ownership ───────────────────────────────────────────────────────────────
+
+export const getOwners = () => get<Owner[]>("/api/ownership");
+
+export const getOwnership = () =>
+  get<OwnershipPercentages>("/api/ownership/percentages");
+
+export const getCountries = () => get<Country[]>("/api/ownership/countries");
+
+// ─── Simulation ───────────────────────────────────────────────────────────────
+
+export const runCutSimulation = (cableId: string) =>
+  post<SimulationResult>("/api/simulation/cut", { cable_id: cableId });
+
+export const getSimulationScenarios = () =>
+  get<SimulationScenario[]>("/api/simulation/scenarios");
+
+export const getSimulationHistory = () =>
+  get<SimulationResult[]>("/api/simulation/history");
+</file>
+
+<file path="lib/constants.ts">
+// /lib/constants.ts
+import { Cable, LandingPoint, Country, Owner } from './types';
+
+export const OWNERS: Owner[] = [
+  { id: 'o1', name: 'Meta', type: 'private' },
+  { id: 'o2', name: 'Google', type: 'private' },
+  { id: 'o3', name: 'Microsoft', type: 'private' },
+  { id: 'o4', name: 'Amazon', type: 'private' },
+  { id: 'o5', name: 'Orange', type: 'telecom' },
+  { id: 'o6', name: 'Vodafone', type: 'telecom' },
+  { id: 'o7', name: 'Tata Communications', type: 'telecom' },
+  { id: 'o8', name: 'Telxius', type: 'telecom' }
+];
+
+export const COUNTRIES: Country[] = [
+  { id: 'c1', name: 'United States', code: 'US', coordinates: [-95.7129, 37.0902] },
+  { id: 'c2', name: 'United Kingdom', code: 'UK', coordinates: [-3.4360, 55.3781] },
+  { id: 'c3', name: 'France', code: 'FR', coordinates: [2.2137, 46.2276] },
+  { id: 'c4', name: 'Japan', code: 'JP', coordinates: [138.2529, 36.2048] },
+  { id: 'c5', name: 'Singapore', code: 'SG', coordinates: [103.8198, 1.3521] },
+  { id: 'c6', name: 'Brazil', code: 'BR', coordinates: [-51.9253, -14.2350] },
+  { id: 'c7', name: 'South Africa', code: 'ZA', coordinates: [22.9375, -30.5595] },
+  { id: 'c8', name: 'India', code: 'IN', coordinates: [78.9629, 20.5937] }
+];
+
+export const LANDING_POINTS: LandingPoint[] = [
+  { id: 'lp1',  name: 'Virginia Beach, VA',           countryId: 'c1', tier: 2, coordinates: [-75.9779, 36.8529] },
+  { id: 'lp2',  name: 'Bude, UK',                     countryId: 'c2', tier: 1, coordinates: [-4.5437, 50.8266] },
+  { id: 'lp3',  name: 'Saint-Hilaire, France',        countryId: 'c3', tier: 2, coordinates: [-1.9448, 46.7289] },
+  { id: 'lp4',  name: 'Shima, Japan',                 countryId: 'c4', tier: 1, coordinates: [136.8219, 34.3308] },
+  { id: 'lp5',  name: 'Tuas, Singapore',              countryId: 'c5', tier: 1, coordinates: [103.6366, 1.3294] },
+  { id: 'lp6',  name: 'Fortaleza, Brazil',            countryId: 'c6', tier: 2, coordinates: [-38.5267, -3.7319] },
+  { id: 'lp7',  name: 'Melkbosstrand, South Africa',  countryId: 'c7', tier: 2, coordinates: [18.4395, -33.7258] },
+  { id: 'lp8',  name: 'Mumbai, India',                countryId: 'c8', tier: 1, coordinates: [72.8777, 19.0760] },
+  { id: 'lp9',  name: 'Marseille, France',            countryId: 'c3', tier: 1, coordinates: [5.3698, 43.2965] },
+  { id: 'lp10', name: 'Bandon, OR',                   countryId: 'c1', tier: 2, coordinates: [-124.4084, 43.1189] },
+  { id: 'lp11', name: 'Genoa, Italy',                 countryId: 'c3', tier: 3, coordinates: [8.9463, 44.4056] }
+];
+
+export const CABLES: Cable[] = [
+  {
+    id: 'cab1', name: 'MAREA', lengthKm: 6600, capacityTbps: 224,
+    status: 'active', region: 'transatlantic',
+    owners: ['o1', 'o3', 'o8'], landingPoints: ['lp1', 'lp3'],
+    // North Atlantic ocean arc — stays well north of shipping lanes
+    path: [
+      [-75.9779, 36.8529],
+      [-68.0, 38.5], [-58.0, 41.5], [-46.0, 44.0],
+      [-34.0, 46.0], [-20.0, 47.5], [-10.0, 47.0],
+      [-1.9448, 46.7289]
+    ],
+    color: '#3b82f6', glowColor: 'rgba(59,130,246,0.4)'
+  },
+  {
+    id: 'cab2', name: 'Dunant', lengthKm: 6400, capacityTbps: 250,
+    status: 'active', region: 'transatlantic',
+    owners: ['o2', 'o5'], landingPoints: ['lp1', 'lp3'],
+    // Slightly more southerly Atlantic arc
+    path: [
+      [-75.9779, 36.8529],
+      [-66.0, 37.5], [-55.0, 40.5], [-44.0, 43.5],
+      [-32.0, 45.5], [-18.0, 46.5], [-8.0, 46.5],
+      [-1.9448, 46.7289]
+    ],
+    color: '#60a5fa', glowColor: 'rgba(96,165,250,0.4)'
+  },
+  {
+    id: 'cab3', name: '2Africa', lengthKm: 45000, capacityTbps: 180,
+    status: 'planned', region: 'emea',
+    owners: ['o1', 'o5', 'o6'], landingPoints: ['lp2', 'lp7', 'lp8'],
+    // UK → West African coast → Cape → East Africa → India
+    path: [
+      [-4.5437, 50.8266],
+      [-8.0, 42.0], [-12.0, 32.0], [-15.5, 22.0],
+      [-17.0, 13.0], [-16.0, 5.0], [-12.0, -2.0],
+      [-5.0, -12.0], [5.0, -22.0], [12.0, -30.0],
+      [18.4395, -33.7258],
+      [26.0, -28.0], [33.0, -20.0], [39.0, -12.0],
+      [44.0, -5.0], [48.0, 5.0], [53.0, 12.0],
+      [60.0, 16.0], [67.0, 18.0],
+      [72.8777, 19.0760]
+    ],
+    color: '#14b8a6', glowColor: 'rgba(20,184,166,0.4)'
+  },
+  {
+    id: 'cab4', name: 'AAE-1', lengthKm: 25000, capacityTbps: 40,
+    status: 'active', region: 'emea',
+    owners: ['o7'], landingPoints: ['lp9', 'lp8', 'lp5'],
+    // Marseille → Mediterranean → Suez → Red Sea → Indian Ocean → Bay of Bengal
+    path: [
+      [5.3698, 43.2965],
+      [12.0, 37.5], [20.0, 34.0], [26.0, 32.5], [32.5, 30.5],
+      [36.0, 24.0], [40.0, 18.0], [43.5, 12.5], [46.0, 11.0],
+      [52.0, 13.5], [58.0, 16.0], [65.0, 17.5],
+      [72.8777, 19.0760],
+      [78.0, 12.0], [85.0, 8.0], [92.0, 4.0], [98.0, 2.0],
+      [103.6366, 1.3294]
+    ],
+    color: '#f59e0b', glowColor: 'rgba(245,158,11,0.4)'
+  },
+  {
+    id: 'cab5', name: 'SeaMeWe-6', lengthKm: 19200, capacityTbps: 120,
+    status: 'planned', region: 'emea',
+    owners: ['o3', 'o5'], landingPoints: ['lp9', 'lp8', 'lp5'],
+    // Slightly different Mediterranean routing
+    path: [
+      [5.3698, 43.2965],
+      [14.0, 38.0], [22.0, 34.5], [28.0, 32.0], [33.0, 30.0],
+      [37.0, 23.5], [41.0, 17.0], [44.5, 12.0],
+      [53.0, 14.0], [60.0, 17.0], [66.0, 18.0],
+      [72.8777, 19.0760],
+      [80.0, 11.0], [88.0, 5.5], [96.0, 2.5],
+      [103.6366, 1.3294]
+    ],
+    color: '#a855f7', glowColor: 'rgba(168,85,247,0.4)'
+  },
+  {
+    id: 'cab6', name: 'FASTER', lengthKm: 11629, capacityTbps: 60,
+    status: 'active', region: 'transpacific',
+    owners: ['o2'], landingPoints: ['lp10', 'lp4'],
+    // Great circle arc across North Pacific — continuous unwrapped coordinates
+    path: [
+      [-124.4084, 43.1189],
+      [-135.0, 46.0], [-145.0, 50.0], [-155.0, 51.5],
+      [-165.0, 51.0], [-175.0, 49.0], [-185.0, 46.5],
+      [-195.0, 43.5], [-205.0, 40.0], [-212.0, 37.0],
+      [-219.0, 35.0], [-223.1781, 34.3308]
+    ],
+    color: '#22c55e', glowColor: 'rgba(34,197,94,0.4)'
+  },
+  {
+    id: 'cab7', name: 'Jupiter', lengthKm: 14600, capacityTbps: 60,
+    status: 'active', region: 'transpacific',
+    owners: ['o1', 'o4'], landingPoints: ['lp10', 'lp4'],
+    // Slightly more southern Pacific arc
+    path: [
+      [-124.4084, 43.1189],
+      [-132.0, 44.5], [-142.0, 47.5], [-152.0, 49.5],
+      [-162.0, 49.0], [-172.0, 47.0], [-182.0, 44.5],
+      [-192.0, 41.5], [-202.0, 38.0], [-210.0, 36.0],
+      [-217.0, 34.5], [-223.1781, 34.3308]
+    ],
+    color: '#4ade80', glowColor: 'rgba(74,222,128,0.4)'
+  },
+  {
+    id: 'cab8', name: 'Apricot', lengthKm: 12000, capacityTbps: 190,
+    status: 'planned', region: 'intra-asia',
+    owners: ['o1', 'o2'], landingPoints: ['lp4', 'lp5'],
+    // Japan → East China Sea → South China Sea → Singapore
+    path: [
+      [136.8219, 34.3308],
+      [133.0, 29.0], [128.0, 23.5], [124.0, 18.0],
+      [120.0, 13.0], [116.0, 8.0], [112.0, 4.5],
+      [108.0, 2.5], [105.0, 1.8],
+      [103.6366, 1.3294]
+    ],
+    color: '#f97316', glowColor: 'rgba(249,115,22,0.4)'
+  },
+  {
+    id: 'cab9', name: 'ACE', lengthKm: 17000, capacityTbps: 20,
+    status: 'active', region: 'emea',
+    owners: ['o5'], landingPoints: ['lp3', 'lp7'],
+    // France → West African coast → South Africa
+    path: [
+      [-1.9448, 46.7289],
+      [-5.0, 42.0], [-8.0, 36.0], [-12.0, 28.5],
+      [-15.0, 20.0], [-16.5, 12.0], [-16.0, 5.0],
+      [-14.0, -1.0], [-10.0, -8.0], [-5.0, -16.0],
+      [2.0, -22.0], [8.0, -28.0], [13.0, -32.0],
+      [18.4395, -33.7258]
+    ],
+    color: '#ef4444', glowColor: 'rgba(239,68,68,0.4)'
+  },
+  {
+    id: 'cab10', name: 'EllaLink', lengthKm: 6200, capacityTbps: 100,
+    status: 'active', region: 'transatlantic',
+    owners: ['o8'], landingPoints: ['lp6', 'lp11'],
+    // Fortaleza Brazil → Mid-Atlantic → Genoa Italy
+    path: [
+      [-38.5267, -3.7319],
+      [-30.0, 4.0], [-22.0, 12.0], [-14.0, 20.0],
+      [-6.0, 28.0], [0.0, 34.0], [4.0, 38.5],
+      [7.0, 42.0], [8.9463, 44.4056]
+    ],
+    color: '#8b5cf6', glowColor: 'rgba(139,92,246,0.4)'
+  }
+];
+</file>
+
+<file path="lib/download.ts">
+import { CABLES, LANDING_POINTS, COUNTRIES, OWNERS } from './constants';
+
+export function downloadData() {
+  const data = {
+    meta: {
+      title: "Submarine Cable Dependency Map Data",
+      source: "Real Rails Intelligence Library",
+      generated: new Date().toISOString(),
+      data_provenance: {
+        topology: "TeleGeography Submarine Cable Map (reference, 2024)",
+        redundancy_scores: "SYNTHETIC — not real-time",
+        events: "SYNTHETIC — no public event feed available"
+      }
+    },
+    cables: CABLES,
+    landing_points: LANDING_POINTS,
+    countries: COUNTRIES,
+    owners: OWNERS
+  };
+
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "submarine_cable_data.json";
+  document.body.appendChild(link);
+  link.click();
+  
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+</file>
+
+<file path="lib/geojson.ts">
+import { Cable, LandingPoint } from './types';
+
+let firstInvalidLogged = false;
+
+function isValidCoordinate(coord: number[]): boolean {
+  return Array.isArray(coord) &&
+         coord.length === 2 &&
+         typeof coord[0] === 'number' &&
+         typeof coord[1] === 'number' &&
+         !isNaN(coord[0]) &&
+         !isNaN(coord[1]);
+}
+
+function logInvalid(id: string, coord: any, type: string) {
+  if (!firstInvalidLogged) {
+    console.error(`Invalid coordinate in ${type} ID: ${id}. Received:`, coord);
+    firstInvalidLogged = true;
+  }
+}
+
+// Catmull-Rom spline: generates smooth curves that pass through all waypoints.
+// Each segment between p1→p2 uses p0 and p3 as tangent guides.
+function catmullRomInterpolate(points: [number, number][], steps = 20): [number, number][] {
+  if (points.length < 2) return points;
+  const result: [number, number][] = [];
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(points.length - 1, i + 2)];
+
+    for (let s = 0; s < steps; s++) {
+      const t  = s / steps;
+      const t2 = t * t;
+      const t3 = t2 * t;
+      const lng =
+        0.5 *
+        (2 * p1[0] +
+          (-p0[0] + p2[0]) * t +
+          (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 +
+          (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3);
+      const lat =
+        0.5 *
+        (2 * p1[1] +
+          (-p0[1] + p2[1]) * t +
+          (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 +
+          (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3);
+      result.push([lng, lat]);
+    }
+  }
+
+  result.push(points[points.length - 1]);
+  return result;
+}
+
+/**
+ * Split a polyline at the antimeridian (±180°) so cables that cross the
+ * International Date Line render cleanly within a single world view.
+ *
+ * Returns an array of segments — most cables return exactly one segment,
+ * transpacific cables return two (one each side of ±180°).
+ */
+function splitAtAntimeridian(path: [number, number][]): [number, number][][] {
+  if (path.length < 2) return [path];
+
+  const segments: [number, number][][] = [[]];
+  let cur = segments[0];
+
+  const wrapLng = (lng: number) => {
+    let w = lng;
+    while (w <= -180) w += 360;
+    while (w > 180) w -= 360;
+    return w;
+  };
+
+  let prevLng = path[0][0];
+  cur.push([wrapLng(path[0][0]), path[0][1]]);
+
+  for (let i = 1; i < path.length; i++) {
+    const pt = path[i];
+    const lng = pt[0];
+
+    if (prevLng > -180 && lng <= -180) {
+      // Crossing from East to West across the -180 line (e.g. US to Japan)
+      const fraction = (-180 - prevLng) / (lng - prevLng);
+      const crossLat = path[i-1][1] + fraction * (pt[1] - path[i-1][1]);
+      
+      cur.push([-180, crossLat]);
+      segments.push([[180, crossLat]]);
+      cur = segments[segments.length - 1];
+    } else if (prevLng < 180 && lng >= 180) {
+      // Crossing from West to East across the +180 line
+      const fraction = (180 - prevLng) / (lng - prevLng);
+      const crossLat = path[i-1][1] + fraction * (pt[1] - path[i-1][1]);
+      
+      cur.push([180, crossLat]);
+      segments.push([[-180, crossLat]]);
+      cur = segments[segments.length - 1];
+    }
+
+    cur.push([wrapLng(lng), pt[1]]);
+    prevLng = lng;
+  }
+
+  return segments.filter(s => s.length >= 2);
+}
+
+export function cablesToGeoJSON(cables: Cable[]) {
+  const features: any[] = [];
+
+  cables.forEach((cable) => {
+    let validPath = cable.path.filter(p => {
+      if (isValidCoordinate(p)) return true;
+      logInvalid(cable.id, p, 'Cable');
+      return false;
+    }) as [number, number][];
+
+    if (validPath.length < 2) return;
+
+    // Catmull-Rom smooth interpolation through ocean-following waypoints
+    const smoothPath = catmullRomInterpolate(validPath, 20);
+
+    // Split at the antimeridian — keeps all coordinates within -180/+180
+    // and prevents the horizontal line artifact on transpacific cables.
+    const segments = splitAtAntimeridian(smoothPath);
+
+    const props = {
+      id:           cable.id,
+      name:         cable.name,
+      capacityTbps: cable.capacityTbps,
+      status:       cable.status,
+      color:        cable.color,
+      glowColor:    cable.glowColor,
+      region:       cable.region,
+      redundancy:   cable.landingPoints.length,
+    };
+
+    if (segments.length === 1) {
+      // Single continuous route — emit one LineString Feature
+      features.push({
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: segments[0] },
+        properties: props,
+      });
+    } else {
+      // Multi-segment transoceanic route — emit one MultiLineString Feature.
+      // All segments share the same properties (same cable ID) so click/hover
+      // events behave identically regardless of which segment is interacted with.
+      features.push({
+        type: 'Feature',
+        geometry: { type: 'MultiLineString', coordinates: segments },
+        properties: props,
+      });
+    }
+  });
+
+  return {
+    type: 'FeatureCollection' as const,
+    features,
+  };
+}
+
+export function landingPointsToGeoJSON(points: LandingPoint[], activeCables: Cable[]) {
+  const features = points.map((lp) => {
+    if (!isValidCoordinate(lp.coordinates)) {
+      logInvalid(lp.id, lp.coordinates, 'LandingPoint');
+      return null;
+    }
+
+    // Calculate intelligence metrics for this landing point based on active cables
+    const connectedCables = activeCables.filter(c => c.landingPoints.includes(lp.id));
+    const capacityTbps = connectedCables.reduce((sum, c) => sum + c.capacityTbps, 0);
+    const redundancyRating = connectedCables.length > 2 ? 'High' : connectedCables.length === 2 ? 'Medium' : 'Low';
+
+    return {
+      type: 'Feature' as const,
+      geometry: {
+        type: 'Point' as const,
+        coordinates: lp.coordinates,
+      },
+      properties: {
+        id:              lp.id,
+        name:            lp.name,
+        countryId:       lp.countryId,
+        tier:            lp.tier ?? 3,
+        connectedCables: connectedCables.length,
+        capacityTbps:    capacityTbps,
+        redundancy:      redundancyRating,
+      },
+    };
+  }).filter(Boolean);
+
+  return {
+    type: 'FeatureCollection' as const,
+    features: features as any[],
+  };
+}
+</file>
+
+<file path="lib/useApi.ts">
+/**
+ * lib/useApi.ts
+ * Lightweight React hooks that wrap the API client.
+ * Each hook handles loading / error state so components stay clean.
+ */
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import {
+  getNetworkOverview,
+  getAssessment,
+  getCables,
+  getCable,
+  getOwners,
+  getOwnership,
+  getLandingPoints,
+  runCutSimulation,
+  getSimulationScenarios,
+  NetworkOverview,
+  NetworkAssessment,
+  OwnershipPercentages,
+  SimulationResult,
+  SimulationScenario,
+  CableFilters,
+} from "./api";
+import { Cable, LandingPoint, Owner } from "./types";
+
+// Generic hook factory
+function useQuery<T>(fetcher: () => Promise<T>, deps: unknown[] = []) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetcher()
+      .then((d) => { if (!cancelled) { setData(d); setLoading(false); } })
+      .catch((e) => { if (!cancelled) { setError(String(e)); setLoading(false); } });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  return { data, loading, error };
+}
+
+// ─── Exported hooks ──────────────────────────────────────────────────────────
+
+export function useNetworkOverview() {
+  return useQuery<NetworkOverview>(getNetworkOverview);
+}
+
+export function useAssessment() {
+  return useQuery<NetworkAssessment>(getAssessment);
+}
+
+export function useCables(filters?: CableFilters) {
+  return useQuery<Cable[]>(
+    () => getCables(filters),
+    [filters?.region, filters?.status, filters?.owner]
+  );
+}
+
+export function useCable(id: string | null) {
+  const [data, setData] = useState<Cable | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) { setData(null); setLoading(false); setError(null); return; }
+    let cancelled = false;
+    setLoading(true);
+    getCable(id)
+      .then((d) => { if (!cancelled) { setData(d); setLoading(false); } })
+      .catch((e) => { if (!cancelled) { setError(String(e)); setLoading(false); } });
+    return () => { cancelled = true; };
+  }, [id]);
+
+  return { data, loading, error };
+}
+
+export function useOwners() {
+  return useQuery<Owner[]>(getOwners);
+}
+
+export function useOwnership() {
+  return useQuery<OwnershipPercentages>(getOwnership);
+}
+
+export function useLandingPoints() {
+  return useQuery<LandingPoint[]>(getLandingPoints);
+}
+
+export function useSimulationScenarios() {
+  return useQuery<SimulationScenario[]>(getSimulationScenarios);
+}
+
+// Imperative hook – returns a trigger function and the last result
+export function useRunSimulation() {
+  const [result, setResult] = useState<SimulationResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = useCallback(async (cableId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const r = await runCutSimulation(cableId);
+      setResult(r);
+    } catch (e) {
+      setError(String(e));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const reset = useCallback(() => { setResult(null); setError(null); }, []);
+
+  return { result, loading, error, run, reset };
+}
+</file>
+
+<file path="lib/utils.ts">
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+import { Cable } from "./types"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function redundancyColor(count: number): string {
+  if (count >= 3) return 'var(--accent-green)';
+  if (count === 2) return 'var(--accent-amber)';
+  return 'var(--accent-red)';
+}
+
+export function redundancyLabel(count: number): string {
+  if (count >= 3) return 'High Redundancy';
+  if (count === 2) return 'Medium Redundancy';
+  return 'Critical / Single Point of Failure';
+}
+
+export function formatTbps(capacity: number): string {
+  return `${capacity} Tbps`;
+}
+
+export function getFilteredCables(cables: Cable[], filters: { region: string, capacity: string, status: string }): Cable[] {
+  return cables.filter(cable => {
+    // Region
+    if (filters.region && filters.region !== 'all') {
+      if (filters.region === 'indian-ocean') {
+        if (cable.region !== 'emea' && cable.region !== 'intra-asia') return false;
+      } else if (cable.region !== filters.region) {
+        return false;
+      }
+    }
+    
+    // Status
+    if (filters.status && filters.status !== 'all') {
+      if (cable.status !== filters.status) return false;
+    }
+    
+    // Capacity
+    if (filters.capacity && filters.capacity !== 'all') {
+      const cap = cable.capacityTbps;
+      if (filters.capacity === '>100') {
+        if (cap <= 100) return false;
+      } else if (filters.capacity === '10-100') {
+        if (cap < 10 || cap > 100) return false;
+      } else if (filters.capacity === '<10') {
+        if (cap >= 10) return false;
+      }
+    }
+    
+    return true;
+  });
+}
+
+export function positionTooltip(x: number, y: number, offset = 15) {
+  return {
+    top: `${y + offset}px`,
+    left: `${x + offset}px`,
+  };
+}
+</file>
+
+<file path="public/mock/cables.geojson">
+{"type":"FeatureCollection","features":[]}
+</file>
+
+<file path="public/mock/landing_points.geojson">
+{"type":"FeatureCollection","features":[]}
+</file>
+
+<file path="public/mock/ownership.json">
+[]
+</file>
+
+<file path=".env.example">
+# Environment Variables
+# No mapbox tokens required for Leaflet rendering
+</file>
+
+<file path=".eslintrc.json">
+{
+  "extends": ["next/core-web-vitals", "next/typescript"]
+}
+</file>
+
+<file path="components.json">
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "rtl": false,
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "registries": {}
+}
+</file>
+
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+export default nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "sub-dependency",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.6.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.21.0",
+    "next": "14.2.15",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-leaflet": "^4.2.1",
+    "recharts": "^3.9.0",
+    "shadcn": "^4.11.0",
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="postcss.config.mjs">
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    tailwindcss: {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="run.py">
+"""run.py - convenience launcher for the FastAPI backend.
+Run from the project root:
+    python run.py
+"""
+import uvicorn
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "backend.main:app",
+        host="127.0.0.1",
+        port=8000,
+        reload=True,
+    )
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+</file>
+
+<file path="test.js">
+const fs = require('fs');
+
+const constants = fs.readFileSync('./lib/constants.ts', 'utf-8');
+
+// We can just execute the array strings to get the raw JSON
+const cablesStr = constants.substring(constants.indexOf('export const CABLES'), constants.length);
+// that's too complex to parse safely with regex, let's just use ts-node with --transpile-only
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="app/globals.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #08131B;
+    --surface: #0D1C28;
+    --border: #1D3446;
+    --primary: #36D6FF;
+    --secondary: #5EEAD4;
+    --text-primary: #F1F5F9;
+    --text-muted: #94A3B8;
+    --accent-red: #ef4444;
+    --accent-amber: #f59e0b;
+    --accent-green: #10b981;
+  }
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Header mount — rises gently from top edge */
+@keyframes headerRise {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-header-rise {
+  animation: headerRise 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Panel content fade-slide — runs when inner content swaps */
+@keyframes panelContentIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-panel-content {
+  animation: panelContentIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Marker-selection feedback — quick scale flash on the close button */
+@keyframes popIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.animate-pop-in {
+  animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Landing point pulse animation — Tier 1 Global Hubs */
+@keyframes hubPulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  50%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(1);   opacity: 0; }
+}
+
+.hub-pulse-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid #36D6FF;
+  animation: hubPulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.hub-pulse-ring.ring-2 {
+  animation-delay: 0.8s;
+}
+
+/* Leaflet map attribution strip */
+.leaflet-control-attribution {
+  background: rgba(8, 19, 27, 0.75) !important;
+  color: #3d4d66 !important;
+  font-size: 9px !important;
+  border-radius: 4px 0 0 0 !important;
+}
+
+.leaflet-control-attribution a {
+  color: #64748b !important;
+}
+
+/* Ensure map container doesn't bleed */
+.leaflet-container {
+  background: #08131B !important;
+}
+
+/* Landing point tooltip */
+.lp-tooltip {
+  background: #0D1C28;
+  border: 1px solid #1D3446;
+  color: #F1F5F9;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  padding: 8px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* Persistent LP labels */
+.lp-permanent-label {
+  color: #F1F5F9;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 1px 6px rgba(0,0,0,0.8);
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  margin-top: -10px;
+}
+
+.lp-permanent-label span {
+  color: #36D6FF;
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+</file>
+
+<file path="app/page.tsx">
+"use client";
+
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useAppState } from '@/components/providers/AppStateProvider';
+import { IntelligenceSidebar } from '@/components/layout/IntelligenceSidebar';
+import { LandingPointPanel } from '@/components/layout/LandingPointPanel';
+import { Header } from '@/components/layout/Header';
+import { X } from 'lucide-react';
+
+const LeafletCableMap = dynamic(() => import('@/components/map/LeafletCableMap'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-[#08131B] flex items-center justify-center text-[#36D6FF]">Loading geographic data...</div>
+});
+
+export default function Home() {
+  const { state, closePanel } = useAppState();
+
+  return (
+    <div className="flex h-screen w-screen overflow-hidden bg-[var(--background)] text-[var(--text-primary)] relative">
+      <Header />
+      
+      {/* Immersive Full-Screen Map Visualization */}
+      <main className="w-full h-full relative z-0">
+        <LeafletCableMap />
+      </main>
+
+      {/* Slide-over Intelligence Panel */}
+      <div 
+        className={`absolute top-0 right-0 h-full w-[380px] sm:w-[520px] z-10 bg-[var(--surface)] shadow-2xl border-l border-[var(--border)] will-change-transform transition-transform duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          state.panelOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        {/* Close button — pops in when panel opens */}
+        {state.panelOpen && (
+          <button 
+            onClick={closePanel}
+            className="animate-pop-in absolute top-4 right-4 z-20 p-1.5 bg-[var(--background)] border border-[var(--border)] rounded text-[var(--text-muted)] hover:text-[#36D6FF] hover:border-[#36D6FF]/40 transition-colors duration-150"
+            aria-label="Close panel"
+          >
+            <X size={18} />
+          </button>
+        )}
+
+        {/* Content — keyed on selection so React remounts and triggers animation on every swap */}
+        <div className="h-full overflow-y-auto sidebar-scroll">
+          {state.selectedCable && (
+            <div key={`cable-${state.selectedCable}`} className="animate-panel-content">
+              <IntelligenceSidebar />
+            </div>
+          )}
+          {state.selectedLandingPoint && !state.selectedCable && (
+            <div key={`lp-${state.selectedLandingPoint}`} className="animate-panel-content">
+              <LandingPointPanel landingPointId={state.selectedLandingPoint} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="backend/services/intelligence.py">
+import math
+from typing import Dict, List
+
+from backend.services.data_loader import DataLoader
+from backend.models.owner import Owner
+from backend.models.cable import Cable
+
+
+def network_overview() -> Dict[str, int | float]:
+    """Compute dynamic network overview values.
+    Returns a dict with keys: active_cables, landing_points, capacity_tbps, health_score.
+    """
+    cables = DataLoader.get_cables()
+    active_cables = sum(1 for c in cables if c.status == "active")
+    total_capacity = sum(c.capacityTbps for c in cables)
+    landing_points = len(DataLoader.get_landing_points())
+
+    total_cables = len(cables)
+    if total_cables == 0:
+        health = 0
+    else:
+        health = int((active_cables / total_cables) * 80 + (total_capacity / (total_cables * 100)) * 20)
+    health = max(0, min(100, round(health)))
+
+    return {
+        "active_cables": active_cables,
+        "landing_points": landing_points,
+        "capacity_tbps": total_capacity,
+        "health_score": health,
+    }
+
+
+def ownership_percentages() -> Dict[str, int]:
+    """Calculate ownership concentration percentages based on cable capacity.
+    Returns a mapping from lower‑cased owner name to integer percentage (rounded).
+    Top owners are Google, Meta, Microsoft, Orange; everything else is "others".
+    """
+    cables = DataLoader.get_cables()
+    owners = DataLoader.get_owners()
+    id_to_name = {o.id: o.name.lower() for o in owners}
+    total_capacity = sum(c.capacityTbps for c in cables)
+    if total_capacity == 0:
+        return {"google": 0, "meta": 0, "microsoft": 0, "orange": 0, "others": 0}
+
+    capacity_by_owner: Dict[str, int] = {}
+    for c in cables:
+        for oid in c.owners:
+            capacity_by_owner[oid] = capacity_by_owner.get(oid, 0) + c.capacityTbps
+
+    top_keys = {
+        "google": "o2",
+        "meta": "o1",
+        "microsoft": "o3",
+        "orange": "o5",
+    }
+    result: Dict[str, int] = {}
+    accounted = 0
+    for name, oid in top_keys.items():
+        pct = round((capacity_by_owner.get(oid, 0) / total_capacity) * 100)
+        result[name] = pct
+        accounted += pct
+    result["others"] = max(0, 100 - accounted)
+    return result
+
+
+def intelligence_assessment() -> Dict[str, str | int]:
+    """Return a composite assessment for the dashboard.
+    Uses network health, ownership concentration and a static bottleneck.
+    """
+    overview = network_overview()
+    health = overview.get("health_score", 0)
+    if health >= 90:
+        resilience = "Strong"
+    elif health >= 70:
+        resilience = "Medium"
+    else:
+        resilience = "Weak"
+
+    ownership = ownership_percentages()
+    top_total = ownership.get("google", 0) + ownership.get("meta", 0) + ownership.get("microsoft", 0) + ownership.get("orange", 0)
+    if top_total > 60:
+        ownership_conc = "High"
+    elif top_total > 40:
+        ownership_conc = "Moderate"
+    else:
+        ownership_conc = "Low"
+
+    return {
+        "health": health,
+        "resilience": resilience,
+        "ownership_concentration": ownership_conc,
+        "primary_bottleneck": "Suez Corridor",
+        "regional_dependency": "High in EMEA",
+    }
+</file>
+
+<file path="backend/main.py">
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.routers import cables, ownership, network, simulation
+from backend.services.data_loader import DataLoader
+
+app = FastAPI(
+    title="Real Rails Infrastructure Intelligence API",
+    description="Production‑ready backend for the Submarine Cable Intelligence platform",
+    version="1.0.0",
+)
+
+# ---------- CORS ----------
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ---------- Routers ----------
+app.include_router(cables.router,     prefix="/api/cables",     tags=["Cables"])
+app.include_router(ownership.router,  prefix="/api/ownership",  tags=["Ownership"])
+app.include_router(network.router,    prefix="/api/network",    tags=["Network"])
+app.include_router(simulation.router, prefix="/api/simulation", tags=["Simulation"])
+
+# ---------- Root & health ----------
+@app.get("/", tags=["Root"])
+async def root():
+    return {"message": "Real Rails Infrastructure Intelligence API"}
+
+@app.get("/health", tags=["Health"])
+async def health():
+    return {"status": "healthy"}
+
+# ---------- Startup ----------
+@app.on_event("startup")
+async def startup_event():
+    # Load all JSON data into the in‑memory cache
+    DataLoader.load_all()
+</file>
+
+<file path="components/layout/Header.tsx">
+"use client";
+
+import { Info, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
+export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <header className="animate-header-rise absolute inset-x-0 top-0 z-[5] flex items-start justify-between px-6 py-4 pointer-events-none">
+      <div className="pointer-events-auto rounded-lg border border-[var(--border)]/50 bg-[var(--surface)]/80 px-4 py-2 shadow-lg backdrop-blur-md">
+        <h1 className="text-xs font-bold tracking-widest uppercase text-[var(--text-primary)]">
+          Infocreon <span className="ml-1 text-[var(--primary)]">Internship</span>
+        </h1>
+      </div>
+
+      <button
+        onClick={() => setIsOpen(true)}
+        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)]/70 bg-[var(--surface)]/85 text-[var(--text-muted)] shadow-lg backdrop-blur-md transition-colors hover:border-[var(--primary)]/60 hover:text-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/70"
+        aria-label="About this dashboard"
+        aria-haspopup="dialog"
+      >
+        <Info size={18} />
+      </button>
+
+      {isOpen &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-[#030712]/70 p-5 animate-fade-in"
+            role="presentation"
+            onMouseDown={() => setIsOpen(false)}
+          >
+          <section
+            className="w-full max-w-md rounded-2xl border border-[#36D6FF]/25 bg-[#0D1C28] p-6 shadow-2xl shadow-black/60"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-information-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#36D6FF]">Project information</p>
+                <h2 id="project-information-title" className="text-xl font-semibold text-[#F1F5F9]">Submarine Cable Dependency Map</h2>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="rounded-md p-1.5 text-[#94A3B8] transition-colors hover:bg-[#1D3446] hover:text-[#F1F5F9] focus:outline-none focus:ring-2 focus:ring-[#36D6FF]/70"
+                aria-label="Close project information"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <dl className="space-y-4 text-sm">
+              <div className="grid grid-cols-[100px_1fr] gap-4 border-b border-[#1D3446] pb-4">
+                <dt className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">Architect</dt>
+                <dd className="font-medium text-[#F1F5F9]">Karthik L</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-4 border-b border-[#1D3446] pb-4">
+                <dt className="text-xs font-bold uppercase tracking-wider text-[#94A3B8]">Cohort</dt>
+                <dd className="font-medium text-[#F1F5F9]">Batch 5 Interns</dd>
+              </div>
+              <div>
+                <dt className="mb-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8]">Technology</dt>
+                <dd className="flex flex-wrap gap-2">
+                  {['Next.js', 'FastAPI', 'Tailwind CSS', 'Leaflet'].map((technology) => (
+                    <span key={technology} className="rounded border border-[#36D6FF]/20 bg-[#36D6FF]/10 px-2 py-1 text-xs font-medium text-[#36D6FF]">
+                      {technology}
+                    </span>
+                  ))}
+                </dd>
+              </div>
+            </dl>
+          </section>
+          </div>,
+          document.body
+        )}
+    </header>
+  );
+}
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env*.local
+!.env.example
+
+# Python virtual environments, caches, and build artifacts
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+*.egg-info/
+
+# Next.js and local tooling caches
+.turbo/
+.swc/
+.eslintcache
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="README.md">
+# Submarine Cable Dependency Map
+
+A Real Rails Global Infrastructure Intelligence Dashboard designed to visualize submarine cable networks, analyze ownership concentration, evaluate infrastructure resilience, and simulate network disruptions.
+
+## Overview
+
+The Submarine Cable Dependency Map transforms complex subsea infrastructure data into an interactive intelligence platform for exploring global cable connectivity, landing point ecosystems, ownership influence, and operational risk.
+
+Built as part of the Real Rails Intelligence Library, the platform combines geospatial infrastructure visualization with backend-powered intelligence services to provide a comprehensive view of critical internet infrastructure.
+
+## Features
+
+### Infrastructure Intelligence
+
+* Global submarine cable network visualization
+* Landing point connectivity analysis
+* Regional infrastructure coverage assessment
+* Network health monitoring
+* Infrastructure resilience scoring
+
+### Ownership Analytics
+
+* Cable ownership concentration analysis
+* Hyperscaler influence monitoring
+* Regional ownership breakdowns
+* Recharts-powered intelligence visualizations
+
+### Failure Simulation
+
+* Cable disruption simulation
+* Capacity loss assessment
+* Alternative route recommendations
+* Risk narrative generation
+* Resilience impact analysis
+
+### Operational Dashboard
+
+* Real Rails 70/30 intelligence layout
+* Unified Intelligence Sidebar
+* Infrastructure KPI monitoring
+* Dynamic filtering and exploration
+* Infrastructure intelligence reporting
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* Next.js 14
+* TypeScript
+* React
+* Tailwind CSS
+* Leaflet
+* React Leaflet
+* Recharts
+
+### Backend
+
+* FastAPI
+* Python
+* Pydantic
+* Uvicorn
+
+### Data Layer
+
+* GeoJSON Infrastructure Pipeline
+* Cached JSON Data Services
+* Simulation Engine
+* Intelligence Services
+
+---
+
+## Architecture
+
+Frontend (Next.js)
+↓
+API Layer (lib/api.ts)
+↓
+FastAPI Backend
+↓
+Intelligence Services
+↓
+Infrastructure Data Store
+
+### Backend Services
+
+#### Network API
+
+* Network overview metrics
+* Infrastructure assessment
+* Health monitoring
+
+#### Cable API
+
+* Cable intelligence
+* Landing point data
+* Regional filtering
+
+#### Ownership API
+
+* Ownership concentration
+* Country intelligence
+* Ownership analytics
+
+#### Simulation API
+
+* Cable cut simulation
+* Impact assessment
+* Scenario history
+
+---
+
+## Running Locally
+
+### Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+Frontend runs on:
+
+```bash
+http://localhost:3000
+```
+
+### Backend
+
+Install dependencies:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+Run backend:
+
+```bash
+python run.py
+```
+
+or
+
+```bash
+python -m uvicorn backend.main:app --reload
+```
+
+Backend runs on:
+
+```bash
+http://127.0.0.1:8000
+```
+
+Swagger Documentation:
+
+```bash
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## Environment Variables
+
+Create `.env.local`
+
+```env
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+```
+
+No API keys are required.
+
+No Mapbox tokens are required.
+
+The application uses Leaflet with open map tiles.
+
+---
+
+## Real Rails Compliance
+
+The platform follows the Real Rails design system:
+
+* Obsidian Theme (#030712)
+* Strict 70/30 Intelligence Layout
+* Unified Intelligence Sidebar
+* Infrastructure-first terminology
+* Recharts analytics
+* GeoJSON-based mapping architecture
+* Operational intelligence workflows
+
+---
+
+## Current Status
+
+Phase 1 fully operational.
+
+The platform includes:
+
+* Global cable visualization
+* Landing point intelligence
+* Ownership concentration analytics
+* Infrastructure resilience assessment
+* Failure simulation workflows
+* FastAPI backend services
+* Frontend-backend integration
+* Operational intelligence dashboards
+
+---
+
+## Future Improvements
+
+* Advanced infrastructure risk modeling
+* Real-world cable datasets
+* Historical outage analysis
+* Infrastructure event monitoring
+* Enhanced route intelligence
+* Deployment and cloud hosting
+* Persistent simulation history
+
+---
+
+## Author
+
+**Karthik L**
+
+Real Rails Intelligence Library — POC #24
+
+Global Infrastructure Rail
+</file>
+
+<file path="components/layout/IntelligenceSidebar.tsx">
+"use client";
+
+import React, { useMemo } from 'react';
+import { useAppState } from '@/components/providers/AppStateProvider';
+import { getFilteredCables } from '@/lib/utils';
+import { downloadData } from '@/lib/download';
+import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useNetworkOverview, useAssessment, useCables, useCable, useOwners, useOwnership, useRunSimulation } from '@/lib/useApi';
+
+export function IntelligenceSidebar() {
+  const { state, dispatch } = useAppState();
+  const { filters, selectedCable, sim } = state;
+
+  // ── API data ──────────────────────────────────────────────────────────────
+  const { data: allCables }   = useCables();
+  const { data: overview }    = useNetworkOverview();
+  const { data: assessment }  = useAssessment();
+  const { data: owners }      = useOwners();
+  const { data: ownerPcts }   = useOwnership();
+  const { data: selectedCableData } = useCable(selectedCable);
+
+  // ── Simulation hook ───────────────────────────────────────────────────────
+  const { run: runSim, result: simResult, loading: simLoading, error: simError, reset: resetSim } = useRunSimulation();
+
+  // Apply client-side filters to the full cable list for the failure sim dropdown
+  const filteredCables = useMemo(
+    () => getFilteredCables(allCables ?? [], filters),
+    [allCables, filters]
+  );
+
+  // Derived KPI values – fall back to 0 while loading
+  const activeCablesCount = overview?.active_cables ?? 0;
+  const totalCapacity     = overview?.capacity_tbps  ?? 0;
+  const healthScore       = overview?.health_score    ?? 92;
+
+  // Bar chart data – computed from owners + filtered cables
+  const ownerData = useMemo(() => {
+    if (!owners || !allCables) return [
+      { name: 'Hyperscalers', capacity: 0, fill: 'var(--primary)' },
+      { name: 'Telecoms',     capacity: 0, fill: 'var(--secondary)' },
+    ];
+    let hyperscalerCapacity = 0;
+    let telcoCapacity = 0;
+    filteredCables.forEach(cable => {
+      const cableOwners = cable.owners.map(oId => owners.find(o => o.id === oId));
+      const hyperCount  = cableOwners.filter(o => o?.type === 'private').length;
+      const telcoCount  = cableOwners.filter(o => o?.type === 'telecom').length;
+      const total = hyperCount + telcoCount;
+      if (total > 0) {
+        hyperscalerCapacity += (hyperCount / total) * cable.capacityTbps;
+        telcoCapacity       += (telcoCount  / total) * cable.capacityTbps;
+      }
+    });
+    return [
+      { name: 'Hyperscalers', capacity: Math.round(hyperscalerCapacity), fill: 'var(--primary)' },
+      { name: 'Telecoms',     capacity: Math.round(telcoCapacity),       fill: 'var(--secondary)' },
+    ];
+  }, [filteredCables, owners, allCables]);
+
+  const handleFilterChange = (key: keyof typeof state.filters, value: string) => {
+    dispatch({ type: 'SET_FILTERS', payload: { [key]: value } });
+  };
+
+  const handleSimulate = async () => {
+    if (!selectedCable) return;
+    await runSim(selectedCable);
+  };
+
+  const handleResetSim = () => {
+    resetSim();
+    dispatch({ type: 'SET_SELECTED_CABLE', payload: null });
+  };
+
+  const handleDownload = () => {
+    downloadData();
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-[var(--surface)] text-[var(--text-primary)]">
+      {/* SECTION A: Title + KPI */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h1 className="text-lg font-semibold text-[var(--primary)] mb-1">Infocreon Internship</h1>
+        {selectedCableData ? (
+          <div className="mt-4 flex flex-col bg-[var(--background)] border border-[var(--border)] rounded shadow-sm overflow-hidden">
+            {/* Header / Badge */}
+            <div className="flex justify-between items-center p-3 border-b border-[var(--border)] bg-[#0f1d38]/30">
+              <h2 className="text-sm font-bold text-gray-100 uppercase tracking-widest">{selectedCableData.name}</h2>
+              <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded tracking-widest ${selectedCableData.status === 'active' ? 'bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/30' : 'bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/30'}`}>
+                {selectedCableData.status}
+              </span>
+            </div>
+            
+            {/* 2x2 Grid for Core Metrics */}
+            <div className="grid grid-cols-2 gap-[1px] bg-[var(--border)]">
+              <div className="bg-[var(--background)] p-3 flex flex-col">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Capacity</span>
+                <span className="text-sm font-bold text-gray-200">{selectedCableData.capacityTbps} <span className="text-[10px] text-[#64748b]">Tbps</span></span>
+              </div>
+              <div className="bg-[var(--background)] p-3 flex flex-col">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Landing Hubs</span>
+                <span className="text-sm font-bold text-gray-200">{selectedCableData.landingPoints.length}</span>
+              </div>
+              <div className="bg-[var(--background)] p-3 flex flex-col">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Connected Region</span>
+                <span className="text-sm font-bold text-gray-200 uppercase">{selectedCableData.region}</span>
+              </div>
+              <div className="bg-[var(--background)] p-3 flex flex-col">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Ownership</span>
+                <span className="text-[10px] font-bold text-[#38BDF8] leading-tight mt-1 truncate" title={selectedCableData.owners.map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}>
+                  {selectedCableData.owners.map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}
+                </span>
+              </div>
+            </div>
+
+            {/* Risk / Redundancy Bar */}
+            <div className="flex border-t border-[var(--border)] bg-[#0B1117]">
+              <div className="flex-1 p-2 border-r border-[var(--border)] flex justify-between items-center">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider">Redundancy</span>
+                <span className={`text-[10px] font-bold ${selectedCableData.landingPoints.length > 2 ? 'text-[#22c55e]' : selectedCableData.landingPoints.length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
+                  {selectedCableData.landingPoints.length > 2 ? 'HIGH' : selectedCableData.landingPoints.length === 2 ? 'MEDIUM' : 'LOW'}
+                </span>
+              </div>
+              <div className="flex-1 p-2 flex justify-between items-center">
+                <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider">Risk Rating</span>
+                <span className={`text-[10px] font-bold ${selectedCableData.landingPoints.length > 2 ? 'text-[#22c55e]' : selectedCableData.landingPoints.length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
+                  {selectedCableData.landingPoints.length > 2 ? 'LOW' : selectedCableData.landingPoints.length === 2 ? 'MEDIUM' : 'HIGH'}
+                </span>
+              </div>
+            </div>
+
+            {/* Analytical Context */}
+            <div className="p-3 border-t border-[var(--border)] bg-[#0B1117]">
+              <span className="text-[9px] uppercase text-[#818CF8] font-bold tracking-widest mb-1.5 block">Why This Matters</span>
+              <p className="text-[10px] text-[#94a3b8] leading-relaxed">
+                {selectedCableData.name === 'AAE-1' ? 'Supports connectivity between Europe, the Middle East, and Asia. Disruption would increase routing dependency on alternative Mediterranean corridors.' :
+                 selectedCableData.name === '2Africa' ? 'Encircles the African continent, providing critical backbone access to emerging markets. Disruption impacts vast swathes of coastal infrastructure.' :
+                 ['MAREA', 'Dunant', 'EllaLink'].includes(selectedCableData.name) ? 'Serves as a primary Trans-Atlantic data pipe. High traffic volume creates massive potential impact during severance.' :
+                 ['FASTER', 'Jupiter'].includes(selectedCableData.name) ? 'Critical Trans-Pacific corridor. Supports major hyperscaler synchronization between US and Asian data centers.' :
+                 `Strategic corridor in the ${selectedCableData.region} region. Disruption requires immediate payload shifting to adjacent subsea networks.`}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="flex flex-col bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+              <span className="text-xl font-bold text-[var(--text-primary)] leading-none tracking-tight mb-1">{activeCablesCount}</span>
+              <span className="text-[9px] uppercase font-semibold tracking-wider text-[var(--text-muted)] mb-1.5">Active Cables</span>
+              <span className="text-[9px] text-[#64748b] leading-tight">Critical physical connections carrying global backbone traffic.</span>
+            </div>
+            
+            <div className="flex flex-col bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+              <span className="text-xl font-bold text-[var(--text-primary)] leading-none tracking-tight mb-1">{overview?.landing_points ?? 0}</span>
+              <span className="text-[9px] uppercase font-semibold tracking-wider text-[var(--text-muted)] mb-1.5">Landing Points</span>
+              <span className="text-[9px] text-[#64748b] leading-tight">Coastal hubs terminating and amplifying signals.</span>
+            </div>
+
+            <div className="flex flex-col bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+              <span className="text-xl font-bold text-[var(--text-primary)] leading-none tracking-tight mb-1">{totalCapacity} <span className="text-xs font-medium text-[var(--text-muted)]">Tbps</span></span>
+              <span className="text-[9px] uppercase font-semibold tracking-wider text-[var(--text-muted)] mb-1.5">Total Capacity</span>
+              <span className="text-[9px] text-[#64748b] leading-tight">Supports major transcontinental internet corridors.</span>
+            </div>
+
+            <div className="flex flex-col bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+              <span className={`text-xl font-bold leading-none tracking-tight mb-1 ${simResult ? 'text-[#f97316]' : 'text-[#38BDF8]'}`}>
+                {simResult ? simResult.health_score : healthScore}<span className="text-xs font-medium opacity-50">/100</span>
+              </span>
+              <span className="text-[9px] uppercase font-semibold tracking-wider text-[var(--text-muted)] mb-1.5">Network Health</span>
+              <span className="text-[9px] text-[#64748b] leading-tight">
+                {simResult ? `Post-cut · was ${healthScore}` : 'Current aggregated global infrastructure resilience score.'}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* SECTION B: Intelligence Assessment */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Current Assessment</h3>
+        
+        {/* Core Indicators – data from GET /api/network/assessment */}
+        <div className="flex flex-col gap-1.5 mb-4 border-l-2 border-[#38BDF8] pl-3">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">Network Health</span>
+            <span className={`text-xs font-bold ${simResult ? 'text-[#f97316]' : 'text-[#38BDF8]'}`}>
+              {simResult ? `${simResult.health_score}/100` : `${healthScore}/100`}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">Infrastructure Resilience</span>
+            <span className={`text-xs font-bold ${simResult ? 'text-[#f97316]' : 'text-[#22c55e]'}`}>
+              {simResult ? 'Stressed' : (assessment?.resilience ?? 'Strong')}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">Ownership Concentration</span>
+            <span className="text-xs font-bold text-[#f59e0b]">{assessment?.ownership_concentration ?? 'Moderate'}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">Primary Bottleneck</span>
+            <span className="text-xs font-bold text-gray-200">{assessment?.primary_bottleneck ?? 'Suez Corridor'}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">Regional Dependency</span>
+            <span className="text-xs font-bold text-gray-200">{assessment?.regional_dependency ?? 'High in EMEA'}</span>
+          </div>
+        </div>
+
+        {/* 3 Compact Cards */}
+        <div className="flex flex-col gap-2">
+          <div className="bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+            <span className="text-[9px] uppercase font-bold text-[#38BDF8] tracking-widest block mb-1">Network Exposure</span>
+            <span className="text-[10px] text-[#cbd5e1] leading-tight block">
+              {activeCablesCount} active cables currently connect major economic corridors, bearing concentrated global traffic.
+            </span>
+          </div>
+
+          <div className="bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+            <span className="text-[9px] uppercase font-bold text-[#38BDF8] tracking-widest block mb-1">Redundancy Assessment</span>
+            <span className="text-[10px] text-[#cbd5e1] leading-tight block">
+              Atlantic routes maintain strong redundancy while Mediterranean corridors remain highly concentrated and vulnerable.
+            </span>
+          </div>
+
+          <div className="bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm">
+            <span className="text-[9px] uppercase font-bold text-[#38BDF8] tracking-widest block mb-1">Operational Outlook</span>
+            <span className="text-[10px] text-[#cbd5e1] leading-tight block">
+              {simResult
+                ? 'Active disruption detected. Payload shifting to adjacent networks causing elevated regional latency.'
+                : 'Current network posture remains stable with no active disruption scenarios reported.'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION C: Who Controls The Rail */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Ownership Intelligence</h3>
+        
+        {/* Ownership Assessment */}
+        <div className="bg-[var(--background)] border border-[var(--border)] p-2.5 rounded shadow-sm mb-4">
+          <div className="flex justify-between items-center mb-1.5">
+            <span className="text-[9px] uppercase font-bold text-[#38BDF8] tracking-widest">Ownership Concentration Risk</span>
+            <span className="text-[10px] font-bold text-[#f59e0b]">MODERATE</span>
+          </div>
+          <span className="text-[10px] text-[#cbd5e1] leading-tight block mb-1.5">
+            Four entities influence more than half of tracked network capacity.
+          </span>
+          <span className="text-[10px] text-[#cbd5e1] leading-tight block">
+            Concentration increases operational dependence on a limited set of infrastructure stakeholders.
+          </span>
+        </div>
+
+        <div className="h-28 w-full mb-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart layout="vertical" data={ownerData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+              <XAxis type="number" hide />
+              <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+              <RechartsTooltip cursor={{ fill: 'var(--border)' }} contentStyle={{ backgroundColor: 'var(--background)', borderColor: 'var(--border)', fontSize: '12px' }} />
+              <Bar dataKey="capacity" radius={[0, 4, 4, 0]}>
+                {ownerData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Top Owners List – data from GET /api/ownership/percentages */}
+        <div className="mb-4">
+          <span className="text-[9px] uppercase text-[#818CF8] font-bold tracking-widest mb-1.5 block">Top Owners</span>
+          <div className="flex flex-col gap-[1px] bg-[var(--border)]">
+            {(['google','meta','microsoft','orange'] as const).map(key => (
+              <div key={key} className="bg-[var(--background)] p-2 flex justify-between items-center">
+                <span className="text-[10px] text-gray-200 font-medium capitalize">{key}</span>
+                <span className="text-[10px] font-bold text-[#38BDF8]">{ownerPcts?.[key] ?? '--'}%</span>
+              </div>
+            ))}
+            <div className="bg-[var(--background)] p-2 flex justify-between items-center">
+              <span className="text-[10px] text-[var(--text-muted)] font-medium">Others</span>
+              <span className="text-[10px] font-bold text-[var(--text-muted)]">{ownerPcts?.others ?? '--'}%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Infrastructure Insight */}
+        <div className="border-l-2 border-[#10b981] pl-3 py-1">
+          <span className="text-[9px] uppercase font-bold text-[#10b981] tracking-widest block mb-1">Governance Outlook</span>
+          <p className="text-[10px] text-[#94a3b8] leading-tight">
+            Ownership remains diversified across telecom operators and hyperscalers, reducing single-entity control risk.
+          </p>
+        </div>
+      </div>
+
+      {/* SECTION D: Filters & Operational Controls */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-3">Operational Controls</h3>
+        
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="flex flex-col">
+            <label className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Region</label>
+            <select value={filters.region} onChange={(e) => handleFilterChange('region', e.target.value)} className="bg-[var(--background)] border border-[var(--border)] rounded text-xs p-2 focus:outline-none focus:border-[var(--primary)]">
+              <option value="all">Global</option>
+              <option value="transatlantic">Trans-Atlantic</option>
+              <option value="transpacific">Trans-Pacific</option>
+              <option value="emea">EMEA</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Capacity</label>
+            <select value={filters.capacity} onChange={(e) => handleFilterChange('capacity', e.target.value)} className="bg-[var(--background)] border border-[var(--border)] rounded text-xs p-2 focus:outline-none focus:border-[var(--primary)]">
+              <option value="all">All</option>
+              <option value=">100">&gt;100 Tbps</option>
+              <option value="10-100">10-100 Tbps</option>
+              <option value="<10">&lt;10 Tbps</option>
+            </select>
+          </div>
+        </div>
+
+        {/* ── Failure Simulation ──────────────────────────────────────────── */}
+        <div className="bg-[var(--background)] p-4 border border-[var(--border)] rounded-md border-l-2 border-l-[var(--accent-amber)]">
+          <h4 className="text-xs font-semibold mb-1">Failure Simulation</h4>
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
+            Analyze network rerouting capacity and physical bottlenecks upon simulated cable cuts.
+          </p>
+
+          {/* Cable selector */}
+          <div className="flex flex-col mb-3">
+            <label className="text-[10px] text-[var(--text-muted)] uppercase mb-1">Select Cable</label>
+            <select
+              id="sim-cable-select"
+              value={selectedCable || ''}
+              onChange={(e) => dispatch({ type: 'SET_SELECTED_CABLE', payload: e.target.value || null })}
+              className="bg-[var(--surface)] border border-[var(--border)] rounded text-xs p-2 focus:outline-none focus:border-[var(--primary)]"
+            >
+              <option value="">-- Choose target infrastructure --</option>
+              {filteredCables.filter(c => c.status !== 'planned').map(cable => (
+                <option key={cable.id} value={cable.id}>{cable.name} ({cable.capacityTbps} Tbps)</option>
+              ))}
+              {filteredCables.length === 0 && <option disabled>Loading cables…</option>}
+            </select>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-2">
+            <button
+              id="sim-run-btn"
+              onClick={handleSimulate}
+              disabled={!selectedCable || simLoading}
+              className="flex-1 bg-[var(--border)] hover:bg-[var(--primary)] hover:text-black disabled:opacity-50 text-xs py-2 rounded transition-colors font-medium"
+            >
+              {simLoading ? 'Running…' : 'Simulate Cut'}
+            </button>
+            <button
+              id="sim-reset-btn"
+              onClick={handleResetSim}
+              disabled={!simResult && !simError}
+              className="flex-1 bg-transparent border border-[var(--border)] hover:bg-[var(--border)] disabled:opacity-50 text-xs py-2 rounded transition-colors"
+            >
+              Reset
+            </button>
+          </div>
+
+          {/* Loading state */}
+          {simLoading && (
+            <div className="mt-3 flex items-center gap-2 p-2.5 bg-[rgba(56,189,248,0.06)] border border-[rgba(56,189,248,0.15)] rounded">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-pulse shrink-0" />
+              <span className="text-[10px] text-[#38BDF8] font-medium tracking-wide">Calculating Network Impact…</span>
+            </div>
+          )}
+
+          {/* Error state */}
+          {simError && !simLoading && (
+            <div className="mt-3 p-2.5 bg-[rgba(239,68,68,0.08)] border border-[rgba(239,68,68,0.2)] rounded">
+              <span className="text-[10px] text-[#ef4444] font-semibold block">Simulation unavailable</span>
+              <span className="text-[9px] text-[#94a3b8] leading-tight block mt-0.5">{simError}</span>
+            </div>
+          )}
+
+          {/* Intelligence Result Card */}
+          {simResult && !simLoading && (() => {
+            const ic =
+              simResult.impact === 'HIGH'
+                ? { bg: 'rgba(249,115,22,0.12)', bd: 'rgba(249,115,22,0.35)', tx: '#f97316' }
+                : simResult.impact === 'MEDIUM'
+                ? { bg: 'rgba(6,182,212,0.12)',  bd: 'rgba(6,182,212,0.35)',  tx: '#06b6d4' }
+                : { bg: 'rgba(100,116,139,0.12)', bd: 'rgba(100,116,139,0.35)', tx: '#64748b' };
+            return (
+              <div className="mt-3 flex flex-col gap-1.5">
+
+                {/* Impact level + capacity lost */}
+                <div
+                  style={{ background: ic.bg, borderColor: ic.bd, color: ic.tx }}
+                  className="flex items-center justify-between px-2.5 py-2 rounded border"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span style={{ background: ic.tx }} className="inline-block w-1.5 h-1.5 rounded-full shrink-0" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{simResult.impact} IMPACT</span>
+                  </div>
+                  <span className="text-[10px] font-bold">{simResult.capacity_loss_tbps} Tbps lost</span>
+                </div>
+
+                {/* Network health before → after */}
+                <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
+                  <span className="text-[9px] uppercase font-bold text-[#94a3b8] tracking-widest block mb-1.5">Network Health</span>
+                  <div className="flex items-stretch gap-1">
+                    <div className="flex-1 flex flex-col items-center bg-[rgba(56,189,248,0.06)] rounded py-1.5">
+                      <span className="text-[8px] text-[#64748b] uppercase tracking-wider mb-0.5">Before</span>
+                      <span className="text-sm font-bold text-[#38BDF8] leading-none">{healthScore}</span>
+                    </div>
+                    <div className="flex items-center px-0.5 text-[#475569] text-xs">→</div>
+                    <div className="flex-1 flex flex-col items-center bg-[rgba(249,115,22,0.06)] rounded py-1.5">
+                      <span className="text-[8px] text-[#64748b] uppercase tracking-wider mb-0.5">After</span>
+                      <span className="text-sm font-bold text-[#f97316] leading-none">{simResult.health_score}</span>
+                    </div>
+                    <div className="flex items-center px-0.5 text-[#475569] text-xs">·</div>
+                    <div className="flex-1 flex flex-col items-center bg-[rgba(239,68,68,0.06)] rounded py-1.5">
+                      <span className="text-[8px] text-[#64748b] uppercase tracking-wider mb-0.5">Delta</span>
+                      <span className="text-sm font-bold text-[#ef4444] leading-none">−{healthScore - simResult.health_score}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Affected regions */}
+                <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
+                  <span className="text-[9px] uppercase font-bold text-[#94a3b8] tracking-widest block mb-1.5">Affected Regions</span>
+                  <div className="flex flex-wrap gap-1">
+                    {simResult.affected_regions.map(r => (
+                      <span key={r} className="text-[9px] px-1.5 py-0.5 bg-[rgba(249,115,22,0.1)] border border-[rgba(249,115,22,0.2)] text-[#f97316] rounded font-semibold uppercase tracking-wide">
+                        {r}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Risk narrative */}
+                <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
+                  <span className="text-[9px] uppercase font-bold text-[#818CF8] tracking-widest block mb-1">Risk Narrative</span>
+                  <p className="text-[10px] text-[#94a3b8] leading-relaxed">{simResult.risk_narrative}</p>
+                </div>
+
+                {/* Rerouting recommendation */}
+                <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
+                  <span className="text-[9px] uppercase font-bold text-[#38BDF8] tracking-widest block mb-1">Rerouting Recommendation</span>
+                  <p className="text-[10px] text-[#94a3b8] leading-relaxed">{simResult.rerouting_recommendation}</p>
+                </div>
+
+                {/* Alternative cables */}
+                {simResult.alternative_cables.length > 0 && (
+                  <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
+                    <span className="text-[9px] uppercase font-bold text-[#10b981] tracking-widest block mb-1.5">Alternative Routes</span>
+                    <div className="flex flex-wrap gap-1">
+                      {simResult.alternative_cables.map(cable => (
+                        <span key={cable} className="text-[9px] px-1.5 py-0.5 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] text-[#10b981] rounded font-semibold">
+                          {cable}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            );
+          })()}
+        </div>
+      </div>
+
+      {/* SECTION E: Infrastructure Events */}
+      <div className="p-5 border-b border-[var(--border)]">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-4">Infrastructure Events</h3>
+        
+        <div className="relative border-l border-[var(--border)] ml-1.5 py-1 flex flex-col gap-4">
+          
+          <div className="relative pl-3.5">
+            <div className="absolute w-1.5 h-1.5 rounded-full bg-[#f97316] -left-[3.5px] top-1.5 shadow-[0_0_4px_#f97316]"></div>
+            <p className="text-[10px] text-gray-200 leading-tight mb-1">Marseille remains primary EMEA landing hub</p>
+            <span className="inline-block text-[8px] uppercase font-bold tracking-widest text-[#f97316] bg-[#f97316]/10 border border-[#f97316]/20 px-1 py-0.5 rounded">Impact: High</span>
+          </div>
+
+          <div className="relative pl-3.5">
+            <div className="absolute w-1.5 h-1.5 rounded-full bg-[#06b6d4] -left-[3.5px] top-1.5 shadow-[0_0_4px_#06b6d4]"></div>
+            <p className="text-[10px] text-gray-200 leading-tight mb-1">Suez corridor carrying concentrated regional traffic</p>
+            <span className="inline-block text-[8px] uppercase font-bold tracking-widest text-[#06b6d4] bg-[#06b6d4]/10 border border-[#06b6d4]/20 px-1 py-0.5 rounded">Impact: Moderate</span>
+          </div>
+
+          <div className="relative pl-3.5">
+            <div className="absolute w-1.5 h-1.5 rounded-full bg-[#818CF8] -left-[3.5px] top-1.5 shadow-[0_0_4px_#818CF8]"></div>
+            <p className="text-[10px] text-gray-200 leading-tight mb-1">{activeCablesCount} active cable systems currently operational</p>
+            <span className="inline-block text-[8px] uppercase font-bold tracking-widest text-[#818CF8] bg-[#818CF8]/10 border border-[#818CF8]/20 px-1 py-0.5 rounded">Impact: Informational</span>
+          </div>
+
+          <div className="relative pl-3.5">
+            <div className="absolute w-1.5 h-1.5 rounded-full bg-[#06b6d4] -left-[3.5px] top-1.5 shadow-[0_0_4px_#06b6d4]"></div>
+            <p className="text-[10px] text-gray-200 leading-tight mb-1">Ownership concentration unchanged</p>
+            <span className="inline-block text-[8px] uppercase font-bold tracking-widest text-[#06b6d4] bg-[#06b6d4]/10 border border-[#06b6d4]/20 px-1 py-0.5 rounded">Impact: Moderate</span>
+          </div>
+
+          <div className="relative pl-3.5">
+            <div className="absolute w-1.5 h-1.5 rounded-full bg-[#64748b] -left-[3.5px] top-1.5 shadow-[0_0_4px_#64748b]"></div>
+            <p className="text-[10px] text-gray-200 leading-tight mb-1">Atlantic redundancy remains strong</p>
+            <span className="inline-block text-[8px] uppercase font-bold tracking-widest text-[#64748b] bg-[#64748b]/10 border border-[#64748b]/20 px-1 py-0.5 rounded">Impact: Low</span>
+          </div>
+
+        </div>
+      </div>
+
+      {/* SECTION F: Data & Export */}
+      <div className="p-5 mt-auto">
+        <button 
+          onClick={handleDownload}
+          className="w-full bg-transparent border border-[var(--border)] hover:bg-[var(--border)] text-xs py-2 rounded transition-colors"
+        >
+          Download Intelligence Data (JSON)
+        </button>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/map/LeafletCableMap.tsx">
+"use client";
+
+import React, { useMemo, useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, GeoJSON, Marker, useMap, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { useAppState } from '@/components/providers/AppStateProvider';
+import { CABLES, LANDING_POINTS } from '@/lib/constants';
+import { getFilteredCables } from '@/lib/utils';
+import { cablesToGeoJSON, landingPointsToGeoJSON } from '@/lib/geojson';
+
+// ─── Map bounds: single world instance, no infinite scroll ───────────────────
+// Network geographic extent (all landing points + cable arcs):
+//   lng: -124° (Oregon) → +137° (Japan)   lat: -34° (S.Africa) → +52° (Pacific arc)
+// WORLD_BOUNDS wraps the whole globe, used by TileLayer to prevent tile repetition.
+// NETWORK_BOUNDS is used for fitBounds on initial load.
+// MAX_BOUNDS adds generous padding so users can still pan/explore freely,
+// but cannot scroll infinitely into empty repeated world copies.
+const WORLD_BOUNDS    = L.latLngBounds(L.latLng(-85, -180), L.latLng(85, 180));
+const NETWORK_BOUNDS  = L.latLngBounds(L.latLng(-42, -135), L.latLng(58, 150));
+const MAX_BOUNDS      = L.latLngBounds(L.latLng(-85, -180), L.latLng(85, 180)); // Clamped strictly to tile bounds to eliminate black bands
+
+// ─── Tier config ─────────────────────────────────────────────────────────────
+const TIER_CONFIG = {
+  1: { radius: 8,  strokeWidth: 2,   fillColor: '#0f1d38', strokeColor: '#38BDF8' },
+  2: { radius: 5,  strokeWidth: 1.5, fillColor: '#0f1d38', strokeColor: '#818CF8' },
+  3: { radius: 3,  strokeWidth: 1,   fillColor: '#0B1117', strokeColor: '#3d5a78' },
+} as const;
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Build a DivIcon for Tier 1 Global Hub nodes (supports CSS animation) */
+function buildTier1Icon(isAffected: boolean, name: string): L.DivIcon {
+  const color = isAffected ? '#ef4444' : '#38BDF8';
+  const size = 16; // px — outer container
+  const dot  = 6;
+
+  return L.divIcon({
+    className: '',
+    iconSize:   [size, size],
+    iconAnchor: [size / 2, size / 2],
+    html: `
+      <div style="
+        position: relative;
+        width: ${size}px;
+        height: ${size}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div class="hub-pulse-ring" style="width: ${size}px; height: ${size}px; top: 0; left: 0; border-color: ${color};"></div>
+        <div class="hub-pulse-ring ring-2" style="width: ${size}px; height: ${size}px; top: 0; left: 0; border-color: ${color};"></div>
+        <div style="width: ${dot}px; height: ${dot}px; border-radius: 50%; background: ${color}; box-shadow: 0 0 6px ${color}; position: relative; z-index: 2;"></div>
+        <div class="lp-permanent-label">
+          ${name}
+          <span>Global Internet Hub</span>
+        </div>
+      </div>
+    `,
+  });
+}
+
+/** Build a DivIcon for Tier 2 Regional Hubs (conditional label based on zoom) */
+function buildTier2Icon(isAffected: boolean, name: string, showLabel: boolean): L.DivIcon {
+  const color = isAffected ? '#ef4444' : '#818CF8';
+  const dot = 10; // 5px radius
+  
+  return L.divIcon({
+    className: '',
+    iconSize:   [dot, dot],
+    iconAnchor: [dot / 2, dot / 2],
+    html: `
+      <div style="position: relative; width: ${dot}px; height: ${dot}px; display: flex; align-items: center; justify-content: center;">
+        <div style="width: ${dot}px; height: ${dot}px; border-radius: 50%; background: #0f1d38; border: 1.5px solid ${color}; position: relative; z-index: 2;"></div>
+        ${showLabel ? `
+        <div class="lp-permanent-label" style="margin-left: 12px; margin-top: -6px;">
+          ${name}
+          <span style="color: #818CF8;">Regional Hub</span>
+        </div>
+        ` : ''}
+      </div>
+    `,
+  });
+}
+
+// ─── Sub-component: fits map to cable network, enforces bounds on load ───────
+function MapInitializer() {
+  const map = useMap();
+  useEffect(() => {
+    // Enforce strict bounds — viscosity=1 means map snaps back instantly
+    map.setMaxBounds(MAX_BOUNDS);
+    map.options.maxBoundsViscosity = 1.0;
+
+    const handleResize = () => {
+      // Calculate minimum zoom needed to fill the viewport width horizontally
+      // Tile size is 256px at zoom 0. We need 256 * 2^z >= mapWidth.
+      const mapWidth = map.getSize().x;
+      const minZoom = Math.log2(mapWidth / 256);
+      map.setMinZoom(minZoom);
+    };
+
+    // Ensure size is computed correctly inside the flex container
+    setTimeout(() => {
+      map.invalidateSize();
+      handleResize(); // Prevent zooming out into black edge bands
+      map.fitBounds(NETWORK_BOUNDS, { padding: [24, 24], animate: false });
+    }, 80);
+
+    map.on('resize', handleResize);
+    return () => { map.off('resize', handleResize); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
+}
+
+interface VisibleLayers {
+  cables: boolean;
+  landingPoints: boolean;
+  ownership: boolean;
+  risk: boolean;
+  capacity: boolean;
+}
+
+// ─── Sub-component: Curated Labels ────────────────────────────────────────────
+const CURATED_LABELS = [
+  { name: 'North Atlantic Ocean', lat: 35, lng: -45, type: 'ocean' },
+  { name: 'South Atlantic Ocean', lat: -20, lng: -15, type: 'ocean' },
+  { name: 'North Pacific Ocean', lat: 30, lng: 160, type: 'ocean' },
+  { name: 'South Pacific Ocean', lat: -20, lng: -130, type: 'ocean' },
+  { name: 'Indian Ocean', lat: -10, lng: 80, type: 'ocean' },
+  { name: 'North America', lat: 45, lng: -100, type: 'continent' },
+  { name: 'South America', lat: -15, lng: -60, type: 'continent' },
+  { name: 'Europe', lat: 50, lng: 15, type: 'continent' },
+  { name: 'Africa', lat: 10, lng: 20, type: 'continent' },
+  { name: 'Asia', lat: 45, lng: 90, type: 'continent' }
+];
+
+function CuratedLabelsLayer() {
+  return (
+    <>
+      {CURATED_LABELS.map((label, i) => {
+        const style = label.type === 'ocean' 
+          ? 'color: rgba(148, 163, 184, 0.35); font-size: 13px; font-weight: 500; font-style: italic; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; transform: translate(-50%, -50%); pointer-events: none;'
+          : 'color: rgba(71, 85, 105, 0.45); font-size: 16px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; white-space: nowrap; transform: translate(-50%, -50%); pointer-events: none;';
+        
+        return (
+          <Marker
+            key={i}
+            position={[label.lat, label.lng]}
+            icon={L.divIcon({
+              className: 'curated-label-icon',
+              html: `<div style="${style}">${label.name}</div>`,
+              iconSize: [0, 0]
+            })}
+            interactive={false}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+// ─── Sub-component: Strategic Chokepoints ───────────────────────────────────
+const CHOKEPOINTS = [
+  { 
+    name: 'Marseille', lat: 41.5, lng: 5.5, 
+    importance: 'Critical Mediterranean Landing Hub', 
+    corridors: 6, impact: 'High' 
+  },
+  { 
+    name: 'Suez Corridor', lat: 27.5, lng: 34.0, 
+    importance: 'Primary Asia-Europe Transit Route', 
+    corridors: 14, impact: 'Critical' 
+  },
+  { 
+    name: 'Strait of Malacca', lat: 4.5, lng: 99.0, 
+    importance: 'Key Indo-Pacific Maritime Chokepoint', 
+    corridors: 9, impact: 'High' 
+  },
+  { 
+    name: 'Singapore Gateway', lat: 0.8, lng: 104.5, 
+    importance: 'Major SE Asia Aggregation Hub', 
+    corridors: 11, impact: 'Critical' 
+  },
+  { 
+    name: 'English Channel', lat: 49.5, lng: -2.5, 
+    importance: 'Primary UK-Europe Transit Route', 
+    corridors: 8, impact: 'Medium' 
+  }
+];
+
+function ChokepointsLayer() {
+  const onEachChokepoint = (chokepoint: typeof CHOKEPOINTS[0]) => (node: any) => {
+    if (!node) return;
+    
+    const impactColor = chokepoint.impact === 'Critical' ? '#ef4444' : 
+                        chokepoint.impact === 'High' ? '#f97316' : '#f59e0b';
+    
+    node.bindTooltip(
+      `<div class="lp-tooltip" style="border-left: 2px solid #f59e0b;">
+         <div style="font-weight:bold; font-size:12px; margin-bottom:4px; color:#f59e0b; text-transform:uppercase; letter-spacing:1px;">${chokepoint.name}</div>
+         <div style="color:#94a3b8; margin-bottom:8px; font-size:10px;">${chokepoint.importance}</div>
+         <div style="display:flex; justify-content:space-between; width:160px; margin-bottom:2px;">
+           <span style="color:#94a3b8;">Connected Corridors:</span> <span style="font-weight:600; color:#e2e8f0;">${chokepoint.corridors}</span>
+         </div>
+         <div style="display:flex; justify-content:space-between; width:160px;">
+           <span style="color:#94a3b8;">Regional Impact:</span> <span style="color:${impactColor}; font-weight:600;">${chokepoint.impact}</span>
+         </div>
+       </div>`,
+      { direction: 'top', offset: [0, -6], className: '' }
+    );
+  };
+
+  return (
+    <>
+      {CHOKEPOINTS.map((chokepoint, i) => (
+        <Marker
+          key={i}
+          position={[chokepoint.lat, chokepoint.lng]}
+          icon={L.divIcon({
+            className: '',
+            iconSize: [100, 20],
+            iconAnchor: [6, 10], // Anchor at the crosshair
+            html: `
+              <div style="display: flex; align-items: center; cursor: crosshair;">
+                <div style="width: 12px; height: 12px; border: 1.5px solid rgba(245, 158, 11, 0.4); transform: rotate(45deg); display: flex; justify-content: center; align-items: center; position: relative;">
+                  <div style="width: 2px; height: 2px; background: rgba(245, 158, 11, 0.8);"></div>
+                </div>
+                <div style="margin-left: 8px; font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #f59e0b; opacity: 0.45; white-space: nowrap; pointer-events: none;">
+                  ${chokepoint.name}
+                </div>
+              </div>
+            `
+          })}
+          ref={onEachChokepoint(chokepoint)}
+        />
+      ))}
+    </>
+  );
+}
+
+// ─── Sub-component: cable GeoJSON layers (glow pass + main pass) ─────────────
+interface CableLayersProps {
+  geojsonCables: ReturnType<typeof cablesToGeoJSON>;
+  selectedCable: string | null;
+  hoveredCable: string | null;
+  simCableId: string | null;
+  visibleLayers: VisibleLayers;
+  onCableClick: (id: string) => void;
+  onCableHover: (id: string | null) => void;
+}
+
+function CableLayers({
+  geojsonCables, selectedCable, hoveredCable, simCableId, visibleLayers, onCableClick, onCableHover,
+}: CableLayersProps) {
+
+  /** GLOW layer — thicker, semi-transparent, rendered below main layer */
+  const glowStyle = (feature: any) => {
+    if (!visibleLayers.cables) return { opacity: 0, weight: 0, fillOpacity: 0 };
+    
+    const id       = feature.properties.id;
+    const isSelected  = selectedCable === id;
+    const isHovered   = hoveredCable === id;
+    const isSim       = simCableId === id;
+    const glowColor   = isSim ? 'rgba(239,68,68,0.35)' : feature.properties.glowColor || 'rgba(56,189,248,0.25)';
+
+    if (!isSelected && !isHovered) return { opacity: 0, weight: 0, fillOpacity: 0 };
+
+    return {
+      color:       glowColor,
+      weight:      isSelected ? 18 : 10,
+      opacity:     isSelected ? 0.3 : 0.2,
+      fillOpacity: 0,
+      lineCap:     'round' as const,
+      lineJoin:    'round' as const,
+    };
+  };
+
+  /** MAIN cable layer */
+  const cableStyle = (feature: any) => {
+    if (!visibleLayers.cables) return { opacity: 0, weight: 0, fillOpacity: 0 };
+    
+    const id        = feature.properties.id;
+    const isSelected  = selectedCable === id;
+    const isHovered   = hoveredCable === id;
+    const isSim       = simCableId === id;
+    const hasSelection = !!selectedCable || !!hoveredCable;
+
+    let color = feature.properties.color || '#38BDF8';
+    let weight   = 2;
+    let opacity  = 0.75;
+    
+    if (visibleLayers.ownership) {
+      // Simulate ownership coloring: Meta/Google = cyan, Telecom = amber
+      const cable = CABLES.find(c => c.id === id);
+      const isHyper = cable?.owners.some(o => ['o1', 'o2', 'o3', 'o4'].includes(o));
+      color = isHyper ? '#38BDF8' : '#f59e0b';
+    } else if (visibleLayers.risk) {
+      // Simulate risk/redundancy: >2 LPs = high redundancy (green), else low (red)
+      const lpCount = feature.properties.redundancy || 0;
+      color = lpCount > 2 ? '#22c55e' : '#ef4444';
+    }
+
+    if (isSim) {
+      color   = '#ef4444';
+      weight  = isSelected ? 5 : 3;
+      opacity = 1;
+    } else if (isSelected) {
+      weight  = 5;
+      opacity = 1;
+      if (!visibleLayers.ownership && !visibleLayers.risk) color = '#38BDF8';
+    } else if (isHovered) {
+      weight  = 3.5;
+      opacity = 0.95;
+    } else if (hasSelection) {
+      // Dim all non-selected when something is selected
+      opacity = 0.12;
+      weight  = 1.5;
+    } else if (visibleLayers.ownership || visibleLayers.risk) {
+      // Enhance visibility slightly when in an analytical layer mode
+      weight = 2.5;
+      opacity = 0.9;
+    }
+
+    return {
+      color,
+      weight,
+      opacity,
+      fillOpacity: 0,
+      lineCap:  'round' as const,
+      lineJoin: 'round' as const,
+    };
+  };
+
+  const onEachGlowFeature = (_feature: any, _layer: any) => {
+    // Glow layer is purely decorative — no interaction
+  };
+
+  const onEachCableFeature = (feature: any, layer: any) => {
+    const id = feature.properties.id;
+    layer.on({
+      click: () => onCableClick(id),
+      mouseover: () => onCableHover(id),
+      mouseout:  () => onCableHover(null),
+    });
+    // Rich tooltip
+    layer.bindTooltip(
+      `<div class="lp-tooltip">
+        <strong>${feature.properties.name}</strong><br/>
+        ${feature.properties.capacityTbps} Tbps &middot; ${feature.properties.region}
+       </div>`,
+      { sticky: true, className: '', offset: [8, 0] }
+    );
+  };
+
+  const layerKey = `${selectedCable}-${hoveredCable}-${simCableId}-${geojsonCables.features.length}-${visibleLayers.cables}-${visibleLayers.ownership}-${visibleLayers.risk}`;
+
+  return (
+    <>
+      {/* Glow pass */}
+      <GeoJSON
+        key={`glow-${layerKey}`}
+        data={geojsonCables}
+        style={glowStyle}
+        onEachFeature={onEachGlowFeature}
+      />
+      {/* Main pass */}
+      <GeoJSON
+        key={`main-${layerKey}`}
+        data={geojsonCables}
+        style={cableStyle}
+        onEachFeature={onEachCableFeature}
+      />
+    </>
+  );
+}
+
+// ─── Sub-component: Landing point markers ────────────────────────────────────
+interface LandingPointLayersProps {
+  geojsonLPs: ReturnType<typeof landingPointsToGeoJSON>;
+  simCableId: string | null;
+  affectedLPIds: Set<string>;
+  visibleLayers: VisibleLayers;
+  onLPClick: (id: string) => void;
+}
+
+function LandingPointLayers({ geojsonLPs, affectedLPIds, visibleLayers, onLPClick }: LandingPointLayersProps) {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+  
+  useMapEvents({
+    zoom: () => {
+      setZoom(map.getZoom());
+    }
+  });
+
+  if (!visibleLayers.landingPoints) return null;
+
+  const pointToLayer = (feature: any, latlng: L.LatLng) => {
+    const tier      = feature.properties.tier as 1 | 2 | 3;
+    const isAffected = affectedLPIds.has(feature.properties.id);
+    const name      = feature.properties.name;
+    const cfg       = TIER_CONFIG[tier] || TIER_CONFIG[3];
+
+    if (tier === 1) {
+      // Tier 1: Always visible label with CSS pulse
+      return L.marker(latlng, { icon: buildTier1Icon(isAffected, name) });
+    }
+    
+    if (tier === 2) {
+      // Tier 2: DivIcon with conditional label based on medium zoom (>= 4)
+      return L.marker(latlng, { icon: buildTier2Icon(isAffected, name, zoom >= 4) });
+    }
+
+    // Tier 3: canvas CircleMarker, minimal glow
+    const strokeColor = isAffected ? '#ef4444' : cfg.strokeColor;
+    return L.circleMarker(latlng, {
+      radius:      cfg.radius,
+      fillColor:   cfg.fillColor,
+      color:       strokeColor,
+      weight:      cfg.strokeWidth,
+      opacity:     1,
+      fillOpacity: 0.95,
+    });
+  };
+
+  const onEachLP = (feature: any, layer: any) => {
+    const props = feature.properties;
+    
+    layer.on({
+      click: () => onLPClick(props.id)
+    });
+
+    const tierLabel = props.tier === 1 ? 'Global Internet Hub' :
+                      props.tier === 2 ? 'Regional Hub' : 'Landing Station';
+                      
+    const redundancyColor = props.redundancy === 'High' ? '#22c55e' : props.redundancy === 'Medium' ? '#f59e0b' : '#ef4444';
+
+    layer.bindTooltip(
+      `<div class="lp-tooltip">
+         <div style="font-weight:bold; font-size:12px; margin-bottom:4px;">${props.name}</div>
+         <div style="color:#818CF8; margin-bottom:6px; font-size:10px; text-transform:uppercase;">${tierLabel}</div>
+         <div style="display:flex; justify-content:space-between; width:150px; margin-bottom:2px;">
+           <span style="color:#94a3b8;">Connected Cables:</span> <span style="font-weight:600;">${props.connectedCables}</span>
+         </div>
+         <div style="display:flex; justify-content:space-between; width:150px; margin-bottom:2px;">
+           <span style="color:#94a3b8;">Capacity:</span> <span style="font-weight:600;">${props.capacityTbps} Tbps</span>
+         </div>
+         <div style="display:flex; justify-content:space-between; width:150px;">
+           <span style="color:#94a3b8;">Redundancy:</span> <span style="color:${redundancyColor}; font-weight:600;">${props.redundancy}</span>
+         </div>
+       </div>`,
+      { direction: 'top', offset: [0, -6], className: '' }
+    );
+  };
+
+  return (
+    <GeoJSON
+      key={`lps-${geojsonLPs.features.length}-${Array.from(affectedLPIds).join(',')}`}
+      data={geojsonLPs}
+      pointToLayer={pointToLayer}
+      onEachFeature={onEachLP}
+    />
+  );
+}
+
+// ─── Main export ──────────────────────────────────────────────────────────────
+export default function LeafletCableMap() {
+  const { state, dispatch, openPanel } = useAppState();
+  const { filters, selectedCable, sim } = state;
+
+  const [hoveredCable, setHoveredCable] = useState<string | null>(null);
+  
+  const [visibleLayers, setVisibleLayers] = useState<VisibleLayers>({
+    cables: true,
+    landingPoints: true,
+    ownership: false,
+    risk: false,
+    capacity: false
+  });
+
+  const toggleLayer = (layer: keyof VisibleLayers) => {
+    setVisibleLayers(prev => ({ ...prev, [layer]: !prev[layer] }));
+  };
+
+  const filteredCables = useMemo(() => getFilteredCables(CABLES, filters), [filters]);
+
+  const geojsonCables = useMemo(() => cablesToGeoJSON(filteredCables), [filteredCables]);
+  const geojsonLPs    = useMemo(() => {
+    const lpIds = new Set(filteredCables.flatMap(c => c.landingPoints));
+    return landingPointsToGeoJSON(LANDING_POINTS.filter(lp => lpIds.has(lp.id)), filteredCables);
+  }, [filteredCables]);
+
+  // Derive affected landing points from active simulation
+  const affectedLPIds = useMemo<Set<string>>(() => {
+    if (!sim.running || !sim.cableId) return new Set();
+    const cable = CABLES.find(c => c.id === sim.cableId);
+    return new Set(cable?.landingPoints ?? []);
+  }, [sim]);
+
+  const handleCableClick = (id: string) => {
+    dispatch({ type: 'SET_SELECTED_CABLE', payload: id });
+    dispatch({ type: 'SET_SELECTED_LANDING_POINT', payload: null });
+    openPanel();
+  };
+
+  return (
+    <div className="w-full h-full relative bg-[#030712] z-0">
+      <MapContainer
+        center={[28, 10]}
+        zoom={2.4}
+        minZoom={2}
+        maxZoom={9}
+        style={{ height: '100%', width: '100%', background: '#030712' }}
+        preferCanvas={true}
+        zoomControl={false}
+        worldCopyJump={false}
+        maxBounds={MAX_BOUNDS}
+        maxBoundsViscosity={1.0}
+      >
+        {/* CartoDB Dark Matter — no authentication required */}
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+          noWrap={true}
+          bounds={WORLD_BOUNDS}
+        />
+
+        <CableLayers
+          geojsonCables={geojsonCables}
+          selectedCable={selectedCable}
+          hoveredCable={hoveredCable}
+          simCableId={sim.running ? sim.cableId : null}
+          visibleLayers={visibleLayers}
+          onCableClick={handleCableClick}
+          onCableHover={setHoveredCable}
+        />
+
+        <LandingPointLayers
+          geojsonLPs={geojsonLPs}
+          simCableId={sim.running ? sim.cableId : null}
+          affectedLPIds={affectedLPIds}
+          visibleLayers={visibleLayers}
+          onLPClick={(id) => {
+            dispatch({ type: 'SET_SELECTED_LANDING_POINT', payload: id });
+            dispatch({ type: 'SET_SELECTED_CABLE', payload: null });
+            openPanel();
+          }}
+        />
+
+        <CuratedLabelsLayer />
+        <ChokepointsLayer />
+
+        {/* Initializer runs once: fitBounds to network + enforce constraints */}
+        <MapInitializer />
+      </MapContainer>
+
+      {/* Map Tool Panel (Phase 5) */}
+      <div className="absolute top-1/2 -translate-y-1/2 left-4 z-[1000] flex flex-col gap-2 bg-[#0B1117]/90 backdrop-blur-sm border border-[#1F2937] rounded-lg p-2 shadow-xl">
+        <button className={`text-left text-xs px-3 py-2 rounded transition-colors ${visibleLayers.cables ? 'bg-[#38BDF8]/10 text-[#38BDF8]' : 'text-[#94a3b8] hover:text-gray-200'}`} onClick={() => toggleLayer('cables')}>
+          <span className="mr-2 opacity-70">≈</span> Cables
+        </button>
+        <button className={`text-left text-xs px-3 py-2 rounded transition-colors ${visibleLayers.landingPoints ? 'bg-[#38BDF8]/10 text-[#38BDF8]' : 'text-[#94a3b8] hover:text-gray-200'}`} onClick={() => toggleLayer('landingPoints')}>
+          <span className="mr-2 opacity-70">⚲</span> Landing Points
+        </button>
+        <div className="h-px w-full bg-[#1F2937] my-1"></div>
+        <button className={`text-left text-xs px-3 py-2 rounded transition-colors ${visibleLayers.ownership ? 'bg-[#818CF8]/10 text-[#818CF8]' : 'text-[#94a3b8] hover:text-gray-200'}`} onClick={() => toggleLayer('ownership')}>
+          <span className="mr-2 opacity-70">⊚</span> Ownership
+        </button>
+        <button className={`text-left text-xs px-3 py-2 rounded transition-colors ${visibleLayers.risk ? 'bg-[#22c55e]/10 text-[#22c55e]' : 'text-[#94a3b8] hover:text-gray-200'}`} onClick={() => toggleLayer('risk')}>
+          <span className="mr-2 opacity-70">⚠</span> Risk
+        </button>
+        <button className={`text-left text-xs px-3 py-2 rounded transition-colors ${visibleLayers.capacity ? 'bg-[#f59e0b]/10 text-[#f59e0b]' : 'text-[#94a3b8] hover:text-gray-200'}`} onClick={() => toggleLayer('capacity')}>
+          <span className="mr-2 opacity-70">⚡</span> Capacity
+        </button>
+      </div>
+
+      {/* Network Overview Card (Phase 4 & 8) */}
+      <div className="absolute bottom-4 left-4 z-[1000] bg-[#0B1117]/90 backdrop-blur-sm border border-[#1F2937] rounded flex flex-col p-2 shadow-xl">
+        <div className="text-[8px] font-bold text-[#64748b] uppercase tracking-widest mb-1.5 px-1 border-b border-[#1F2937]/50 pb-1">Network Status</div>
+        <div className="grid grid-cols-2 gap-y-1.5 gap-x-6 px-1">
+          <div className="flex flex-col">
+            <span className="text-[8px] text-[#64748b] uppercase font-semibold leading-none mb-0.5">Active Cables</span>
+            <span className="text-sm font-bold text-gray-200 leading-none">{filteredCables.filter(c => c.status === 'active').length}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[8px] text-[#64748b] uppercase font-semibold leading-none mb-0.5">Landing Points</span>
+            <span className="text-sm font-bold text-gray-200 leading-none">{new Set(filteredCables.flatMap(c => c.landingPoints)).size}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[8px] text-[#64748b] uppercase font-semibold leading-none mb-0.5">Total Capacity</span>
+            <span className="text-sm font-bold text-gray-200 leading-none">{filteredCables.reduce((sum, c) => sum + c.capacityTbps, 0)}<span className="text-[9px] font-medium text-gray-500 ml-0.5">Tbps</span></span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[8px] text-[#64748b] uppercase font-semibold leading-none mb-0.5">System Health</span>
+            <span className={`text-sm font-bold leading-none ${sim.running ? 'text-[#ef4444]' : 'text-[#38BDF8]'}`}>
+              {sim.running ? '74' : '92'}<span className="text-[9px] font-medium opacity-50 ml-0.5">/100</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Capacity Overlay Labels (Phase 3) */}
+      {visibleLayers.capacity && (
+        <div className="absolute top-1/4 right-1/4 z-[500] pointer-events-none">
+          <div className="bg-[#f59e0b]/10 border border-[#f59e0b]/20 text-[#f59e0b] px-3 py-1 rounded text-xs font-bold tracking-widest uppercase">
+            High Capacity Corridor
+          </div>
+        </div>
+      )}
+
+      {/* Sim badge overlay */}
+      {sim.running && sim.cableId && (() => {
+        const cable = CABLES.find(c => c.id === sim.cableId);
+        return (
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[500] px-4 py-2 rounded-md border border-[#ef4444]/40 bg-[#030712]/90 backdrop-blur-sm text-xs text-[#ef4444] font-medium tracking-wide animate-fade-in shadow-lg shadow-red-900/20">
+            ⚠ SIMULATED CUT — {cable?.name} — {cable?.capacityTbps} Tbps offline
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+</file>
+
+<file path="components/providers/AppStateProvider.tsx">
+"use client";
+
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { AppState, FilterState, SimulationResult } from '@/lib/types';
+
+type Action = 
+  | { type: 'SET_SELECTED_CABLE'; payload: string | null }
+  | { type: 'SET_SELECTED_LANDING_POINT'; payload: string | null }
+  | { type: 'SET_ACTIVE_TAB'; payload: AppState['activeTab'] }
+  | { type: 'SET_FILTERS'; payload: Partial<FilterState> }
+  | { type: 'SET_SIM_STATE'; payload: Partial<AppState['sim']> }
+  | { type: 'SET_SIM_RESULT'; payload: { result: SimulationResult | null; error: string | null } }
+  | { type: 'SET_PANEL'; payload: AppState['panel'] }
+  | { type: 'SET_PANEL_OPEN'; payload: boolean };
+
+const initialState: AppState = {
+  selectedCable: null,
+  selectedLandingPoint: null,
+  activeTab: 'map',
+  filters: { region: 'all', capacity: 'all', status: 'all' },
+  sim: { running: false, cableId: null, result: null, error: null },
+  panel: null,
+  panelOpen: false,
+};
+
+const AppStateContext = createContext<{
+  state: AppState;
+  dispatch: React.Dispatch<Action>;
+  openPanel: () => void;
+  closePanel: () => void;
+} | undefined>(undefined);
+
+function appStateReducer(state: AppState, action: Action): AppState {
+  switch (action.type) {
+    case 'SET_SELECTED_CABLE':
+      return { ...state, selectedCable: action.payload };
+    case 'SET_ACTIVE_TAB':
+      return { ...state, activeTab: action.payload };
+    case 'SET_FILTERS':
+      return { ...state, filters: { ...state.filters, ...action.payload } };
+    case 'SET_SIM_STATE':
+      return { ...state, sim: { ...state.sim, ...action.payload } };
+    case 'SET_SIM_RESULT':
+      return { ...state, sim: { ...state.sim, result: action.payload.result, error: action.payload.error, running: false } };
+    case 'SET_PANEL':
+      return { ...state, panel: action.payload };
+    case 'SET_SELECTED_LANDING_POINT':
+      return { ...state, selectedLandingPoint: action.payload };
+    case 'SET_PANEL_OPEN':
+      return { ...state, panelOpen: action.payload };
+    default:
+      return state;
+  }
+}
+
+export function AppStateProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(appStateReducer, initialState);
+
+  const openPanel = () => dispatch({ type: 'SET_PANEL_OPEN', payload: true });
+  const closePanel = () => dispatch({ type: 'SET_PANEL_OPEN', payload: false });
+
+  return (
+    <AppStateContext.Provider value={{ state, dispatch, openPanel, closePanel }}>
+      {children}
+    </AppStateContext.Provider>
+  );
+}
+
+export function useAppState() {
+  const context = useContext(AppStateContext);
+  if (context === undefined) {
+    throw new Error('useAppState must be used within an AppStateProvider');
+  }
+  return context;
+}
+</file>
+
+<file path="lib/types.ts">
+// /lib/types.ts
+export type CableStatus = 'active' | 'planned' | 'under_repair' | 'offline';
+export type CableRegion = 'transatlantic' | 'transpacific' | 'intra-asia' | 'emea' | 'americas';
+
+export interface Owner {
+  id: string;
+  name: string;
+  type: 'consortium' | 'private' | 'telecom';
+}
+
+export interface Country {
+  id: string;
+  name: string;
+  code: string;
+  coordinates: [number, number]; // [longitude, latitude]
+}
+
+export interface LandingPoint {
+  id: string;
+  name: string;
+  countryId: string;
+  coordinates: [number, number];
+  tier?: 1 | 2 | 3; // 1=Global Hub, 2=Regional Hub, 3=Standard
+}
+
+export interface Cable {
+  id: string;
+  name: string;
+  lengthKm: number;
+  capacityTbps: number;
+  status: CableStatus;
+  region: CableRegion;
+  owners: string[]; // Owner IDs
+  landingPoints: string[]; // LandingPoint IDs
+  path: [number, number][]; // Array of [longitude, latitude]
+  color: string;
+  glowColor: string;
+}
+
+export interface FilterState {
+  region: string;
+  capacity: string;
+  status: string;
+}
+
+export interface SimulationResult {
+  health_score: number;
+  capacity_loss_tbps: number;
+  affected_regions: string[];
+  rerouting_required: boolean;
+  impact: 'HIGH' | 'MEDIUM' | 'LOW';
+  summary: string;
+  resilience_score: number;
+  rerouting_recommendation: string;
+  alternative_cables: string[];
+  risk_narrative: string;
+  timestamp: string;
+}
+
+export interface SimState {
+  running: boolean;
+  cableId: string | null;
+  result: SimulationResult | null;
+  error: string | null;
+}
+
+export interface AppState {
+  selectedCable: string | null;
+  selectedLandingPoint: string | null;
+  activeTab: 'map' | 'country' | 'sim';
+  filters: FilterState;
+  sim: SimState;
+  panel: 'why' | 'who' | null;
+  panelOpen: boolean;
+}
+</file>
+
+</files>
