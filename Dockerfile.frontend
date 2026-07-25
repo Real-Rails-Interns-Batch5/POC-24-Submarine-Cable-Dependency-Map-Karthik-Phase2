@@ -8,8 +8,8 @@ WORKDIR /app
 # Copy dependency definition files to leverage Docker layer caching
 COPY package.json package-lock.json ./
 
-# Clean installation of dependencies using package-lock.json
-RUN npm ci
+# Install dependencies
+RUN npm install
 
 # ==========================================
 # STAGE 2: Application Builder
