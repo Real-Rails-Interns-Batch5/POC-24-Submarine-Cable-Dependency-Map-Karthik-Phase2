@@ -3,6 +3,7 @@ services:
     name: submarine-cable-backend
     runtime: docker
     region: oregon
+    plan: free
     dockerfilePath: Dockerfile.backend
     healthCheckPath: /health
     envVars:
@@ -15,6 +16,7 @@ services:
     name: submarine-cable-frontend
     runtime: docker
     region: oregon
+    plan: free
     dockerfilePath: Dockerfile.frontend
     healthCheckPath: /api/health
     envVars:
