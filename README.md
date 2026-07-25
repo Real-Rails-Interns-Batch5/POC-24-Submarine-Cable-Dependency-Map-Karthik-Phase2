@@ -207,6 +207,21 @@ The platform includes:
 
 ---
 
+## Deployment on Render
+
+This project includes a pre-configured Render Blueprint (`render.yaml`) for 1-click deployment on [Render.com](https://render.com).
+
+### Deployment Steps:
+1. Push your repository to GitHub.
+2. Log in to Render.com and select **New + -> Blueprint**.
+3. Connect your GitHub repository. Render will automatically detect `render.yaml` and configure both the `submarine-cable-backend` and `submarine-cable-frontend` Docker services in the `oregon` region.
+4. Click **Apply**.
+
+> [!NOTE]
+> **Free-Tier Cold Starts**: Render free-tier instances automatically spin down after 15 minutes of inactivity. When accessing the app after spin-down, the initial page load or API request may take **30–60 seconds** while the instances spin up. This is normal free-tier behavior and not a deployment bug.
+
+---
+
 ## Future Improvements
 
 * Advanced infrastructure risk modeling

@@ -5,18 +5,15 @@
  */
 import { Cable, LandingPoint, Owner, Country } from "./types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
+// All fetch calls use relative paths routed through Next.js rewrite proxy
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, { cache: "no-store" });
+  const res = await fetch(path, { cache: "no-store" });
   if (!res.ok) throw new Error(`API error ${res.status} on ${path}`);
   return res.json() as Promise<T>;
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

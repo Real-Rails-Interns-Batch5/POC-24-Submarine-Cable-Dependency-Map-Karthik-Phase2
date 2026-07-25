@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: submarine-cable-backend
+    runtime: docker
+    region: oregon
+    dockerfilePath: Dockerfile.backend
+    healthCheckPath: /health
+    envVars:
+      - key: FASTAPI_HOST
+        value: 0.0.0.0
+      - key: ALLOWED_ORIGINS
+        value: http://localhost:3000,http://127.0.0.1:3000
+
+  - type: web
+    name: submarine-cable-frontend
+    runtime: docker
+    region: oregon
+    dockerfilePath: Dockerfile.frontend
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BACKEND_INTERNAL_URL
+        fromService:
+          type: web
+          name: submarine-cable-backend
+          property: hostport

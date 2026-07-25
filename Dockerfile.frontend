@@ -23,17 +23,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy application source code
 COPY . .
 
-# Accept Build Arguments for Next.js build-time static environment variable baking
-ARG NEXT_PUBLIC_API_URL
-ARG MAPBOX_ACCESS_TOKEN
-ARG MAPBOX_STYLE
-
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-ENV MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
-ENV MAPBOX_STYLE=${MAPBOX_STYLE}
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build production application bundle
+# Build production application bundle (creates .next/standalone)
 RUN npm run build
 
 # ==========================================
