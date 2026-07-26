@@ -5,6 +5,7 @@ import { useAppState } from '@/components/providers/AppStateProvider';
 import { getFilteredCables } from '@/lib/utils';
 import { downloadData } from '@/lib/download';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from 'recharts';
+import { X } from 'lucide-react';
 import { useNetworkOverview, useAssessment, useCables, useCable, useOwners, useOwnership, useRunSimulation } from '@/lib/useApi';
 
 export function IntelligenceSidebar() {
@@ -12,12 +13,15 @@ export function IntelligenceSidebar() {
   const { filters, selectedCable, sim } = state;
 
   // ── API data ──────────────────────────────────────────────────────────────
-  const { data: allCables }   = useCables();
-  const { data: overview }    = useNetworkOverview();
-  const { data: assessment }  = useAssessment();
-  const { data: owners }      = useOwners();
-  const { data: ownerPcts }   = useOwnership();
-  const { data: selectedCableData } = useCable(selectedCable);
+  const { data: allCables, error: cablesError, loading: cablesLoading } = useCables();
+  const { data: overview, error: overviewError } = useNetworkOverview();
+  const { data: assessment, error: assessmentError } = useAssessment();
+  const { data: owners, error: ownersError } = useOwners();
+  const { data: ownerPcts, error: ownerPctsError } = useOwnership();
+  const { data: selectedCableData, error: selectedCableError } = useCable(selectedCable);
+
+  const apiErrors = [cablesError, overviewError, assessmentError, ownersError, ownerPctsError, selectedCableError]
+    .filter(Boolean) as string[];
 
   // ── Simulation hook ───────────────────────────────────────────────────────
   const { run: runSim, result: simResult, loading: simLoading, error: simError, reset: resetSim } = useRunSimulation();
@@ -77,17 +81,45 @@ export function IntelligenceSidebar() {
 
   return (
     <div className="flex flex-col h-full bg-[var(--surface)] text-[var(--text-primary)]">
-      {/* SECTION A: Title + KPI */}
-      <div className="p-5 border-b border-[var(--border)]">
-        <h1 className="text-lg font-semibold text-[var(--primary)] mb-1">Infocreon Internship</h1>
-        {selectedCableData ? (
-          <div className="mt-4 flex flex-col bg-[var(--background)] border border-[var(--border)] rounded shadow-sm overflow-hidden">
-            {/* Header / Badge */}
-            <div className="flex justify-between items-center p-3 border-b border-[var(--border)] bg-[#0f1d38]/30">
-              <h2 className="text-sm font-bold text-gray-100 uppercase tracking-widest">{selectedCableData.name}</h2>
-              <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded tracking-widest ${selectedCableData.status === 'active' ? 'bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/30' : 'bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/30'}`}>
-                {selectedCableData.status}
+      {(apiErrors.length > 0 || cablesLoading) && (
+        <div className="p-4 border-b border-[var(--border)] bg-[rgba(239,68,68,0.06)]">
+          {cablesLoading && apiErrors.length === 0 && (
+            <span className="text-[10px] text-[#38BDF8] font-medium">Loading intelligence data…</span>
+          )}
+          {apiErrors.length > 0 && (
+            <>
+              <span className="text-[10px] text-[#ef4444] font-semibold block">Intelligence API unavailable</span>
+              <span className="text-[9px] text-[#94a3b8] leading-tight block mt-0.5">
+                {apiErrors[0]}
               </span>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* SECTION A: Cable header */}
+      <div className="p-5 border-b border-[var(--border)]">
+        {selectedCableData ? (
+          <div className="flex flex-col bg-[var(--background)] border border-[var(--border)] rounded shadow-sm overflow-hidden">
+            {/* Cable header */}
+            <div className="flex items-center justify-between gap-3 p-4 border-b border-[var(--border)] bg-[#0f1d38]/30">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-3 min-w-0">
+                  <h2 className="min-w-0 text-[22px] font-semibold text-gray-100 uppercase tracking-[0.12em] truncate">
+                    {selectedCableData.name}
+                  </h2>
+                  <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded tracking-widest ${selectedCableData.status === 'active' ? 'bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/30' : 'bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/30'}`}>
+                    {selectedCableData.status}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => dispatch({ type: 'SET_PANEL_OPEN', payload: false })}
+                className="rounded-md p-1.5 text-[var(--text-muted)] border border-[var(--border)] bg-[var(--background)] hover:text-[#36D6FF] hover:border-[#36D6FF]/40 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/70"
+                aria-label="Close panel"
+              >
+                <X size={18} />
+              </button>
             </div>
             
             {/* 2x2 Grid for Core Metrics */}
@@ -98,7 +130,7 @@ export function IntelligenceSidebar() {
               </div>
               <div className="bg-[var(--background)] p-3 flex flex-col">
                 <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Landing Hubs</span>
-                <span className="text-sm font-bold text-gray-200">{selectedCableData.landingPoints.length}</span>
+                <span className="text-sm font-bold text-gray-200">{(selectedCableData.landingPoints ?? []).length}</span>
               </div>
               <div className="bg-[var(--background)] p-3 flex flex-col">
                 <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Connected Region</span>
@@ -106,8 +138,8 @@ export function IntelligenceSidebar() {
               </div>
               <div className="bg-[var(--background)] p-3 flex flex-col">
                 <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider mb-0.5">Ownership</span>
-                <span className="text-[10px] font-bold text-[#38BDF8] leading-tight mt-1 truncate" title={selectedCableData.owners.map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}>
-                  {selectedCableData.owners.map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}
+                <span className="text-[10px] font-bold text-[#38BDF8] leading-tight mt-1 truncate" title={(selectedCableData.owners ?? []).map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}>
+                  {(selectedCableData.owners ?? []).map(oId => owners?.find(o => o.id === oId)?.name).join(', ')}
                 </span>
               </div>
             </div>
@@ -116,14 +148,14 @@ export function IntelligenceSidebar() {
             <div className="flex border-t border-[var(--border)] bg-[#0B1117]">
               <div className="flex-1 p-2 border-r border-[var(--border)] flex justify-between items-center">
                 <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider">Redundancy</span>
-                <span className={`text-[10px] font-bold ${selectedCableData.landingPoints.length > 2 ? 'text-[#22c55e]' : selectedCableData.landingPoints.length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
-                  {selectedCableData.landingPoints.length > 2 ? 'HIGH' : selectedCableData.landingPoints.length === 2 ? 'MEDIUM' : 'LOW'}
+                <span className={`text-[10px] font-bold ${(selectedCableData.landingPoints ?? []).length > 2 ? 'text-[#22c55e]' : (selectedCableData.landingPoints ?? []).length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
+                  {(selectedCableData.landingPoints ?? []).length > 2 ? 'HIGH' : (selectedCableData.landingPoints ?? []).length === 2 ? 'MEDIUM' : 'LOW'}
                 </span>
               </div>
               <div className="flex-1 p-2 flex justify-between items-center">
                 <span className="text-[9px] uppercase text-[var(--text-muted)] font-semibold tracking-wider">Risk Rating</span>
-                <span className={`text-[10px] font-bold ${selectedCableData.landingPoints.length > 2 ? 'text-[#22c55e]' : selectedCableData.landingPoints.length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
-                  {selectedCableData.landingPoints.length > 2 ? 'LOW' : selectedCableData.landingPoints.length === 2 ? 'MEDIUM' : 'HIGH'}
+                <span className={`text-[10px] font-bold ${(selectedCableData.landingPoints ?? []).length > 2 ? 'text-[#22c55e]' : (selectedCableData.landingPoints ?? []).length === 2 ? 'text-[#f59e0b]' : 'text-[#ef4444]'}`}>
+                  {(selectedCableData.landingPoints ?? []).length > 2 ? 'LOW' : (selectedCableData.landingPoints ?? []).length === 2 ? 'MEDIUM' : 'HIGH'}
                 </span>
               </div>
             </div>
@@ -424,7 +456,7 @@ export function IntelligenceSidebar() {
                 <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
                   <span className="text-[9px] uppercase font-bold text-[#94a3b8] tracking-widest block mb-1.5">Affected Regions</span>
                   <div className="flex flex-wrap gap-1">
-                    {simResult.affected_regions.map(r => (
+                    {(simResult.affected_regions ?? []).map(r => (
                       <span key={r} className="text-[9px] px-1.5 py-0.5 bg-[rgba(249,115,22,0.1)] border border-[rgba(249,115,22,0.2)] text-[#f97316] rounded font-semibold uppercase tracking-wide">
                         {r}
                       </span>
@@ -445,11 +477,11 @@ export function IntelligenceSidebar() {
                 </div>
 
                 {/* Alternative cables */}
-                {simResult.alternative_cables.length > 0 && (
+                {(simResult.alternative_cables ?? []).length > 0 && (
                   <div className="bg-[var(--background)] border border-[var(--border)] rounded px-2.5 py-2">
                     <span className="text-[9px] uppercase font-bold text-[#10b981] tracking-widest block mb-1.5">Alternative Routes</span>
                     <div className="flex flex-wrap gap-1">
-                      {simResult.alternative_cables.map(cable => (
+                      {(simResult.alternative_cables ?? []).map(cable => (
                         <span key={cable} className="text-[9px] px-1.5 py-0.5 bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] text-[#10b981] rounded font-semibold">
                           {cable}
                         </span>
