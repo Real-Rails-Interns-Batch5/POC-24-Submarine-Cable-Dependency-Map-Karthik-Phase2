@@ -23,6 +23,7 @@ export function Header() {
           <h1 className="whitespace-nowrap text-xs font-bold tracking-widest uppercase text-[var(--text-primary)]">
             Infocreon <span className="ml-1 text-[var(--primary)]">Internship</span>
           </h1>
+          <span className="h-4 border-l border-[var(--border)]/50" aria-hidden="true" />
           <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
             Submarine Cable Dependency Map
           </p>
